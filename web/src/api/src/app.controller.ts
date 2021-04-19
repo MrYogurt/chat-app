@@ -7,7 +7,7 @@ export class AppController {
 
   @Post('auth')
   catchData(@Body() data: any) {
-    console.log('data:', data);
+    // console.log('data:', data);
 
     return this.appService.checkExistenceUser(data);
   }
