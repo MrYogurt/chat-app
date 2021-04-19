@@ -5,16 +5,18 @@ import { PageNotFound } from './components/page.not.found';
 import { AuthPage } from './components/auth.page';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { StoreContext } from "./context/store.context"
+import { authStore } from "./store/auth.store"
+import { messagesStore } from "./store/messages.store"
 
 
 function App() {
   return (
-    // <StoreContext.Provider
-    //       value={{
-    //         AuthStore,
-    //         MessagesStore,
-    //       }}
-    //     >
+    <StoreContext.Provider
+          value={{
+            authStore,
+            messagesStore,
+          }}
+        >
     <Fragment>
       <Router>
         <Switch>
@@ -25,7 +27,7 @@ function App() {
         </Switch>
       </Router>
     </Fragment>
-  //  </StoreContext.Provider>
+  </StoreContext.Provider>
   );
 }
 

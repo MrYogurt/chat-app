@@ -24,7 +24,7 @@ services:
 #     sender_id   integer
 # );
 
-# CREATE TABLE messages (
+# CREATE TABLE users (
 #     id          SERIAL,
 #     nickname    TEXT,
 #     password    TEXT,

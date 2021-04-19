@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { ChangeEvent } from "react"
 import { observable, action, computed, makeObservable } from "mobx"
 
@@ -34,3 +35,5 @@ export class AuthStore {
     return this.isAuth
   }
 }
+
+export const authStore = new AuthStore()

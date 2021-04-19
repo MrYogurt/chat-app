@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { ChangeEvent } from "react"
 import { observable, action, computed, makeObservable } from "mobx"
 
@@ -33,3 +34,5 @@ export class MessagesStore {
 //     return this.task
 //   }
 }
+
+export const messagesStore = new MessagesStore()
