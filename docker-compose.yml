@@ -3,8 +3,11 @@ version: '3.1'
 services:
 
   db:
+    container_name: my_database
     image: postgres:12.2
     restart: always
+    ports:
+      - 5432:5432
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: 228228228
