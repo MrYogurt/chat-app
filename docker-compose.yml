@@ -1,0 +1,32 @@
+version: '3.1'
+
+services:
+
+  db:
+    image: postgres:12.2
+    restart: always
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: 228228228
+      POSTGRES_DB: admin
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+# CREATE TABLE messages (
+#     id          SERIAL,
+#     message     TEXT,
+#     send_date   timestamp,
+#     sender_name TEXT,
+#     sender_id   integer
+# );
+
+# CREATE TABLE messages (
+#     id          SERIAL,
+#     nickname    TEXT,
+#     password    TEXT,
+#     registration_date timestamp
+# );
