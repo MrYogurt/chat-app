@@ -1,5 +1,8 @@
 import { Box, makeStyles } from '@material-ui/core';
-import React, { FC } from 'react';
+import React, { FC, useLayoutEffect } from 'react';
+import { useHistory } from 'react-router-dom';
+import { Routes_Enum } from '../../constants';
+import { useStoreContext } from '../../context/store.context';
 import { InputMessage } from './ui/input.message';
 import { MessageWindow } from './ui/message.window';
 
@@ -28,7 +31,21 @@ const useStyles = makeStyles({
 });
 
 export const Chat: FC = () => {
+  const {
+    authStore: { authStatus },
+  } = useStoreContext()
+
   const classes = useStyles();
+  const history = useHistory();
+
+  useLayoutEffect(() => {
+    if (!authStatus) {
+      history.push(Routes_Enum.AUTH);
+    }
+    if (authStatus) {
+      history.push(Routes_Enum.CHAT);
+    }
+  }, [history, authStatus])
   return (
     <Box className={classes.root}>
       <Box mt="5vh" className={classes.header}>

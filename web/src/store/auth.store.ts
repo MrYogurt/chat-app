@@ -12,27 +12,40 @@ import { observable, action, computed, makeObservable } from "mobx"
 // }
 
 export class AuthStore {
-  isAuth: boolean | undefined
-//   task: ITask | undefined
-//   currentIndexCategory = 0
-//   prevTaskId: undefined | string
-//   taskStoreLoading: IStoreLoading
-//   taskAPI: TasksAPI
+  user: boolean
 
   constructor() {
-    // this.taskStoreLoading = new LoadingStore()
 
-    // this.taskAPI = taskAPI
+    this.user = false
 
     makeObservable(this, {
-      isAuth: observable,
-    //   currentTask: computed,
-    //   getTaskByIdAsync: action,
+      user: observable,
+      authStatus: computed,
+      changeUserStatus: action,
     })
   }
 
   get authStatus(): boolean | undefined {
-    return this.isAuth
+    if (this.user === undefined) {
+      return false
+    } else if (this.user === false) {
+      return false
+    } else {
+      return true
+    }
+  }
+
+  changeUserStatus = (status: boolean) => {
+    if (!status) {
+      console.log("set user false")
+      this.user = false
+    }
+
+    if (status) {
+      console.log("set user true")
+
+      this.user = true
+    }
   }
 }
 

@@ -3,6 +3,8 @@ import { Box, Button, TextField } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from 'react-router-dom';
 import { Routes_Enum } from '../../constants';
+import { useStoreContext } from '../../context/store.context';
+import { observer } from 'mobx-react';
 
 const useStyles = makeStyles({
   root: {
@@ -32,7 +34,11 @@ const useStyles = makeStyles({
   },
 });
 
-export const LoginForm: FC = () => {
+export const LoginForm: FC = observer(() => {
+  const {
+    authStore: { authStatus, changeUserStatus },
+  } = useStoreContext()
+
   const classes = useStyles();
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   const axios = require('axios').default;
@@ -55,13 +61,24 @@ export const LoginForm: FC = () => {
 
       return;
     } else {
-      axios({
+      const result = await axios({
         method: 'POST',
         url: 'http://localhost:5000/auth',
-        data: { nickname: name, lastName: password } })
+        data: { nickname: name, password: password } })
 
-      setErrorName(false);
-      setErrorPassword(false);
+      if (result.data === true) {
+        setErrorName(false);
+        setErrorPassword(false);
+
+        changeUserStatus(true)
+      }
+
+      if (result.data === false) {
+        setErrorName(false);
+        setErrorPassword(false);
+
+        changeUserStatus(false)
+      }
     }
   };
 
@@ -76,10 +93,13 @@ export const LoginForm: FC = () => {
   const history = useHistory();
 
   useLayoutEffect(() => {
-    // if (isAuth) {
-    history.push(Routes_Enum.AUTH);
-    // }
-  }, [history]);
+    if (!authStatus) {
+      history.push(Routes_Enum.AUTH);
+    }
+    if (authStatus) {
+      history.push(Routes_Enum.CHAT);
+    }
+  }, [history, authStatus]);
 
   return (
     <Box className={classes.root}>
@@ -115,4 +135,4 @@ export const LoginForm: FC = () => {
       </form>
     </Box>
   );
-};
+});

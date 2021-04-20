@@ -5,10 +5,10 @@ import { AppService } from './app.service';
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @Post('auth')
-  catchData(@Body() data: any) {
-    // console.log('data:', data);
+  // @Post('auth')
+  // catchData(@Body() data: any) {
+  //   // console.log('data:', data);
 
-    return this.appService.checkExistenceUser(data);
-  }
+  //   return this.appService.checkExistenceUser(data);
+  // }
 }

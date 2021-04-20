@@ -7,16 +7,16 @@ import {
 } from 'typeorm';
 
 @Entity()
-export class Users extends BaseEntity {
+export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
-  id: number;
+  id?: number;
 
   @Column()
-  nickname: string;
+  nickname?: string;
 
   @Column()
-  password: string;
+  password?: string;
 
   @CreateDateColumn()
-  registration_date: number;
+  registration_date?: number;
 }

@@ -1,4 +1,5 @@
-import { Injectable } from '@nestjs/common';
+import { Dependencies, Injectable } from '@nestjs/common';
+import { getRepositoryToken, InjectRepository } from '@nestjs/typeorm';
 import {
   Column,
   Connection,
@@ -9,38 +10,20 @@ import {
   getManager,
   getRepository,
   PrimaryGeneratedColumn,
+  Repository,
 } from 'typeorm';
-import { Users } from './entity/user';
+import { User } from './entity/user';
 
 @Injectable()
+@Dependencies(getRepositoryToken(User))
 export class AppService {
-  async checkExistenceUser(data: any): Promise<any> {
-    const IUsers: any = new Users();
-    const name = data.nickname;
+  constructor(
+    @InjectRepository(User)
+    private usersRepository: Repository<User>,
+  ) {}
+  // async checkExistenceUser(data: any): Promise<any> {
+  //   const result = this.usersRepository.findOne(data.nickname);
 
-    // const user = await getConnection()
-    //   .createQueryBuilder()
-    //   .select('users')
-    //   .from(IUsers, 'users')
-    //   .where(`users.nickname = :${data.nickname}`)
-    //   .getOne();
-
-    const result = createQueryBuilder('users').where(
-      'users.nickname = :nickname',
-      {
-        nickname: data.nickname,
-      },
-    );
-
-    // const user = await getConnection()
-    // .createQueryBuilder()
-    // .select('nickname')
-    // .from(IUsers, 'user')
-    // .where(`users.nickname = :${data.nickname}`, {
-    //   nickname: data.nickname,
-    // })
-    // .getOne();
-
-    console.log('data228:', result);
-  }
+  //   console.log('data228:', result);
+  // }
 }
