@@ -36,7 +36,7 @@ const useStyles = makeStyles({
 
 export const LoginForm: FC = observer(() => {
   const {
-    authStore: { authStatus, changeUserStatus },
+    authStore: { authStatus, setUser },
   } = useStoreContext()
 
   const classes = useStyles();
@@ -66,18 +66,13 @@ export const LoginForm: FC = observer(() => {
         url: 'http://localhost:5000/auth',
         data: { nickname: name, password: password } })
 
-      if (result.data === true) {
+      console.log("result:", result)
+
+      if(result.data !== "") {
+        setUser(result)
+
         setErrorName(false);
         setErrorPassword(false);
-
-        changeUserStatus(true)
-      }
-
-      if (result.data === false) {
-        setErrorName(false);
-        setErrorPassword(false);
-
-        changeUserStatus(false)
       }
     }
   };

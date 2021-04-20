@@ -10,14 +10,26 @@ export class UserController {
     const resultFindUser = await this.userService.checkExistenceUser(data);
 
     if (resultFindUser) {
-      return true;
+      if (resultFindUser.password === data.password) {
+        const filteredResult = {
+          id: resultFindUser.id,
+          nickname: resultFindUser.nickname,
+          registration_date: resultFindUser.registration_date,
+        };
+
+        return filteredResult;
+      }
+
+      if (resultFindUser.password !== data.password) {
+        return undefined;
+      }
     }
 
     if (resultFindUser === undefined) {
       const result = await this.userService.addUser(data);
 
       if (result) {
-        return true;
+        return result;
       }
     }
   }

@@ -1,51 +1,46 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { ChangeEvent } from "react"
 import { observable, action, computed, makeObservable } from "mobx"
 
-// import { LoadingStore, IStoreLoading } from "./helpers/loading.store"
-
-// interface ICategoriesTask {
-//   subtype: TTSubtype
-//   items: TSubtypes[]
-//   itemsToRecognize?: IItemsToRecognize[]
-//   images?: (IImages | undefined)[] | undefined
-// }
+interface IUser {
+  id?: number
+  nickname?: string
+  registration_date?: string
+}
 
 export class AuthStore {
-  user: boolean
+  user: IUser | undefined
 
   constructor() {
 
-    this.user = false
+    this.user = undefined
 
     makeObservable(this, {
       user: observable,
       authStatus: computed,
-      changeUserStatus: action,
+      getUser: computed,
+      setUser: action,
     })
   }
 
   get authStatus(): boolean | undefined {
     if (this.user === undefined) {
       return false
-    } else if (this.user === false) {
+    } else if (!this.user) {
       return false
     } else {
       return true
     }
   }
 
-  changeUserStatus = (status: boolean) => {
-    if (!status) {
-      console.log("set user false")
-      this.user = false
-    }
+  get getUser(): any {
+    return this.user
+  }
 
-    if (status) {
-      console.log("set user true")
+  setUser = (data: any) => {
+    const filteredData = data.data
 
-      this.user = true
-    }
+    console.log("filteredData:", filteredData)
+    this.user = filteredData
   }
 }
 
