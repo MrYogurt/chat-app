@@ -1,12 +1,13 @@
 import { Box, makeStyles } from '@material-ui/core';
 import React, { FC } from 'react';
-import { MessageItem } from './message.item';
+import { MessageItems } from './message.items';
 
 const useStyles = makeStyles({
   root: {
     mt: '2vh',
     height: '68vh',
     overflow: "auto",
+    width: '72.7%',
   },
 });
 
@@ -15,7 +16,7 @@ export const MessageWindow: FC = () => {
 
   return (
     <Box className={classes.root}>
-      <MessageItem />
+      <MessageItems />
     </Box>
   );
 };

@@ -1,4 +1,4 @@
-import React, { FC, useLayoutEffect } from 'react';
+import React, { FC, useEffect, useLayoutEffect } from 'react';
 import { Box, Button, TextField } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from 'react-router-dom';
@@ -66,8 +66,6 @@ export const LoginForm: FC = observer(() => {
         url: 'http://localhost:5000/auth',
         data: { nickname: name, password: password } })
 
-      console.log("result:", result)
-
       if(result.data !== "") {
         setUser(result)
 
@@ -87,7 +85,7 @@ export const LoginForm: FC = observer(() => {
 
   const history = useHistory();
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (!authStatus) {
       history.push(Routes_Enum.AUTH);
     }

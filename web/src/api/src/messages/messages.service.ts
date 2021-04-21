@@ -11,9 +11,9 @@ export class MessagesService {
   ) {}
 
   async addMessage(data: {
-    sender_id: string;
-    sender_name: string;
-    msg: string;
+    sender_id?: string;
+    sender_name?: string;
+    msg?: string;
   }) {
     const senderId = data.sender_id;
     const senderName = data.sender_name;
@@ -33,7 +33,24 @@ export class MessagesService {
     }
   }
 
-  findAll(): Promise<Messages[]> {
-    return this.usersRepository.find();
+  async findAll(): Promise<Messages[]> {
+    return await this.usersRepository.find();
+  }
+
+  async initializeMessages(): Promise<any> {
+    return await this.usersRepository
+      .createQueryBuilder('messages')
+      .orderBy('messages.id', 'DESC')
+      .limit(20)
+      .getMany();
+  }
+
+  async fetchMoreMessages(count: number): Promise<any> {
+    return await this.usersRepository
+      .createQueryBuilder('messages')
+      .orderBy('messages.id', 'DESC')
+      .skip(count)
+      .take(20)
+      .getMany();
   }
 }
