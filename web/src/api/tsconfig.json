@@ -13,6 +13,8 @@
     "incremental": true
   },
   "include": [
-    "src"
+    "src",
+    "dist",
+    "../constants.ts"
   ]
 }

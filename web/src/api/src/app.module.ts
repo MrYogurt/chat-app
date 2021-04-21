@@ -1,16 +1,16 @@
 import { Module } from '@nestjs/common';
 
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { AppController } from '../src/app.controller';
+import { AppService } from '../src/app.service';
 
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Connection } from 'typeorm';
 
-import { User } from './entity/user';
-import { UsersModule } from './user/user.module';
+import { User } from '../src/entity/user';
+import { UsersModule } from '../src/user/user.module';
 
-import { Messages } from './entity/messages';
-import { MessagesModule } from './messages/messages.module';
+import { Messages } from '../src/entity/messages';
+import { MessagesModule } from '../src/messages/messages.module';
 
 @Module({
   imports: [
