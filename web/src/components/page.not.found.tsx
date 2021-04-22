@@ -13,5 +13,5 @@ const useStyles = makeStyles({
 export const PageNotFound: FC = () => {
   const classes = useStyles();
 
-  return <Box className={classes.root}>Page Not Found</Box>;
+  return <Box className={classes.root}>♂️ BOY NEXT DOOR ♂️</Box>;
 };

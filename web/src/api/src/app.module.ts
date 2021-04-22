@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { GraphQLModule } from '@nestjs/graphql';
 
 import { AppController } from '../src/app.controller';
 import { AppService } from '../src/app.service';
@@ -11,6 +12,8 @@ import { UsersModule } from '../src/user/user.module';
 
 import { Messages } from '../src/entity/messages';
 import { MessagesModule } from '../src/messages/messages.module';
+import { join } from 'path';
+import { UserResolver } from './user/user.resolver';
 
 @Module({
   imports: [
@@ -25,11 +28,14 @@ import { MessagesModule } from '../src/messages/messages.module';
       entities: [User, Messages],
       synchronize: true,
     }),
+    GraphQLModule.forRoot({
+      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+    }),
     UsersModule,
     MessagesModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, UserResolver],
 })
 export class AppModule {
   constructor(private connection: Connection) {}
