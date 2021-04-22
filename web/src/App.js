@@ -1,10 +1,14 @@
 import { Fragment } from 'react';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+
 import { Chat } from './components/chat/chat';
-import { Routes_Enum } from './constants';
 import { PageNotFound } from './components/page.not.found';
 import { AuthPage } from './components/auth.page';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+
+import { Routes_Enum } from './constants';
+
 import { StoreContext } from "./context/store.context"
+
 import { authStore } from "./store/auth.store"
 import { messagesStore } from "./store/messages.store"
 

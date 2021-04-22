@@ -1,10 +1,12 @@
 import { FC, useLayoutEffect } from 'react';
+import { useHistory } from 'react-router-dom';
+
 import { observer } from "mobx-react"
 
 import { Routes_Enum } from '../constants';
-import { useHistory } from 'react-router-dom';
-import { LoginForm } from './login/login.form';
 import { useStoreContext } from '../context/store.context';
+
+import { LoginForm } from './login/login.form';
 
 export const AuthPage: FC = observer(() => {
   const {

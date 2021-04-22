@@ -1,6 +1,7 @@
-import { Actions_Enum } from './../constants';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { observable, action, computed, makeObservable, toJS } from "mobx"
+
+import { Actions_Enum } from './../constants';
 
 interface IMessage {
   id?: number
@@ -25,7 +26,7 @@ export class MessagesStore {
     })
   }
 
-  getAllMessages = async (data: any) => {
+  getAllMessages = async () => {
     await this.axios({
       method: 'POST',
       url: 'http://localhost:5000/chat',
@@ -48,6 +49,7 @@ export class MessagesStore {
       method: 'POST',
       url: 'http://localhost:5000/chat',
       data: { count: countLoading, action: Actions_Enum.FETCH_MORE }}).then((result: any) => {
+        
         this.pushToMessageArray(result.data)
       })
   }
@@ -58,14 +60,14 @@ export class MessagesStore {
     this.messages = parsedData
   }
 
-  pushToMessageArray = (data: IMessage) => {
-    const parsedMessages = toJS(data)
+  pushToMessageArray = (data: any) => {
+    const messages = this.messages
 
-    this.messages.push(parsedMessages)
+    this.messages = data.concat(messages)
   }
 
   get getMessages(): IMessage | undefined {
-    return this.messages
+    return toJS(this.messages)
   }
 }
 

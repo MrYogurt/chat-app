@@ -1,17 +1,9 @@
-import { Box, List, ListItem, makeStyles, Theme } from '@material-ui/core';
-import { toJS } from 'mobx';
-import { observer } from 'mobx-react';
-import { userInfo } from 'os';
-import React, { FC, useEffect, useRef } from 'react';
-import { useStoreContext } from '../../../context/store.context';
-import { messagesStore } from '../../../store/messages.store';
+import { FC } from 'react';
 
-const useStyles = makeStyles<Theme, { messageLength: number }>((theme) => ({
-  root: {
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  msgInContainer: {
+import { Box, makeStyles, Theme } from '@material-ui/core';
+
+const useStyles = makeStyles<Theme>((theme) => ({
+  in: {
     display: 'flex',
     width: 'auto',
     margin: "auto",
@@ -23,10 +15,10 @@ const useStyles = makeStyles<Theme, { messageLength: number }>((theme) => ({
     padding: 10,
     marginTop: "30px",
   },
-  msgOutContainer: {
+  out: {
     display: 'flex',
     width: 'auto',
-    height: '100px',
+    maxWidth: '60%',
     wordWrap: "break-word",
     margin: "auto",
     marginRight: "10px",
@@ -39,35 +31,75 @@ const useStyles = makeStyles<Theme, { messageLength: number }>((theme) => ({
   }
 }))
 
+interface IMessageItem {
+    direction: string
+    senderName: string
+    message: string
+}
 
-export const MessageItems: FC = () => {
+export const MessageItem: FC <IMessageItem> = ({direction, senderName, message}) => {
 
-//   const classes = useStyles({messageLength: message.length});
+    const classes = useStyles();
+
+    const formatMessage = (message: string) => {
+        const splitMessages = message.split(" ")
+
+        if(splitMessages.length > 1) {
+            let messages: string[] = []
+
+            let count = 0
+            let position = 0
+
+            while (position < splitMessages.length) {
+                count += splitMessages[position].length
+
+                if (count < 60) {
+                    messages.push(splitMessages[position])
+                    position++
+                } else {
+                    messages.push("\n")
+                    count = 0
+                }
+            }
+
+            const filteredMessages = messages.join(" ")
+
+            return filteredMessages
+
+        } else if (message.length > 60) {
+            const splitMessage = message.split("")
+
+            let words: string[] = []
+
+            let count = 0
+            let position = 0
+
+            while (position < splitMessage.length) {
+                count += splitMessage[position].length
+
+                if (count < 60) {
+                    words.push(splitMessage[position])
+                    position++
+                } else {
+                    words.push("\n")
+                    count = 0
+                }
+            }
+
+            const filteredMessage = words.join("")
+
+            return filteredMessage
+
+        } else {
+            return message
+        }
+    }
 
   return (
-    // <Box className={classes.root}>
-      
-    //   {messages && toJS(messages).map((item:any) => {
-    //     const parsedUser = toJS(user)
 
-    //     if(parsedUser?.nickname !== item.sender_name) {
-    //       return (
-    //       <Box className={classes.msgInContainer}>
-    //         <Box>{item.sender_name + ":"}</Box>
-    //         <Box ml="10px">{item.message}</Box>
-    //         {/* <Box ml="10px">{item.send_date}</Box> */}
-    //       </Box>
-    //       )
-    //     } else {
-    //       return (
-    //       <Box className={classes.msgOutContainer}>
-    //         <Box>{item.sender_name + ":"}</Box>
-    //         <Box ml="10px">{item.message}</Box>
-    //         {/* <Box ml="10px">{item.send_date}</Box> */}
-    //       </Box>
-    //       )
-    //     }
-    //   })}
-    // </Box>
+        <Box className={classes[direction]}>
+            <Box>{senderName + ":"}</Box>
+            <Box ml="10px" maxWidth="75%">{formatMessage(message)}</Box>
+        </Box>
   );
 };

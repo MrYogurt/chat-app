@@ -39,7 +39,6 @@ export class AuthStore {
   setUser = (data: any) => {
     const filteredData = data.data
 
-    // console.log("filteredData:", filteredData)
     this.user = filteredData
   }
 }

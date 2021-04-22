@@ -1,8 +1,12 @@
-import { Box, makeStyles } from '@material-ui/core';
 import React, { FC, useLayoutEffect } from 'react';
 import { useHistory } from 'react-router-dom';
+
+import { Box, makeStyles } from '@material-ui/core';
+
 import { Routes_Enum } from '../../constants';
+
 import { useStoreContext } from '../../context/store.context';
+
 import { InputMessage } from './ui/input.message';
 import { MessageWindow } from './ui/message.window';
 

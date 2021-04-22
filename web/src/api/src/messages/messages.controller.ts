@@ -1,5 +1,7 @@
-import { MessagesService } from '../../src/messages/messages.service';
 import { Body, Controller, Post } from '@nestjs/common';
+
+import { MessagesService } from '../../src/messages/messages.service';
+
 import { Actions_Enum } from '../../../constants';
 
 @Controller()

@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+
 import { Repository } from 'typeorm';
+
 import { User } from '../../src/entity/user';
 
 @Injectable()
@@ -9,10 +11,6 @@ export class UserService {
     @InjectRepository(User)
     private usersRepository: Repository<User>,
   ) {}
-
-  //   async remove(id: string): Promise<void> {
-  //     await this.usersRepository.delete(id);
-  //   }
 
   async checkExistenceUser(data: any): Promise<any> {
     const result = await this.usersRepository

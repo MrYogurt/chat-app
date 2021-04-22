@@ -1,11 +1,16 @@
-import { Box } from '@material-ui/core';
 import React, { FC } from 'react';
+
+import { toJS } from 'mobx';
+
+import { Box } from '@material-ui/core';
+
 import { Actions_Enum } from '../../../constants';
 import { useStoreContext } from '../../../context/store.context';
 import { Row } from '../../ui/row';
+
 import { SendMessageSubmit } from './submit.button';
 import { TextFieldMessage } from './text.field.message';
-import { toJS } from 'mobx';
+
 
 export const InputMessage: FC = () => {
   const {
