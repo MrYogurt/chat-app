@@ -60,7 +60,7 @@ export class MessagesStore {
       })
   }
 
-  fetchMoreMessages = async (countLoading: number) => {
+  fetchMoreMessages = async (count: number) => {
     await this.axios({
       method: "POST",
           url: "http://localhost:5000/graphql",
@@ -70,8 +70,8 @@ export class MessagesStore {
           },
           
           data: {
-            query: `query fetchMore(${countLoading}: Number!) {
-              fetchMore(countLoading: ${countLoading}) {
+            query: `query fetchMore {
+              fetchMore(count: ${count}) {
                 id
                 message
                 sender_name
@@ -80,12 +80,9 @@ export class MessagesStore {
               }
           }`,
         }
-        
-
      }).then((result: any) => {
-       console.log("result:", result)
-        
-        this.pushToMessageArray(result.data)
+       
+        this.pushToMessageArray(result.data.data.fetchMore)
       }).catch((err: any) => {
         console.log("error:", err)
       })

@@ -26,17 +26,17 @@ const useStyles = makeStyles({
   },
 });
 
-const INITIALIZE_MESSAGES = gql`
-  query initializeMessages {
-    initializeMessages {
-      id
-      message
-      sender_name
-      sender_id
-      send_date
-      }  
-    }
-`;
+// const INITIALIZE_MESSAGES = gql`
+//   query initializeMessages {
+//     initializeMessages {
+//       id
+//       message
+//       sender_name
+//       sender_id
+//       send_date
+//       }  
+//     }
+// `;
 
 export const MessageWindow: FC = observer(() => {
   const {
@@ -44,7 +44,7 @@ export const MessageWindow: FC = observer(() => {
     messagesStore: { messages, getMessages, getInitialMessages, fetchMoreMessages },
   } = useStoreContext()
 
-  const { loading, error, data } = useQuery(INITIALIZE_MESSAGES)
+  // const { loading, error, data } = useQuery(INITIALIZE_MESSAGES)
   
   const classes = useStyles();
 
@@ -65,7 +65,7 @@ export const MessageWindow: FC = observer(() => {
 
   useEffect(() => {
     const user = toJS(getUser)
-    console.log("checkData:", data, INITIALIZE_MESSAGES)
+    // console.log("checkData:", data, INITIALIZE_MESSAGES)
     
     if (!messages) {
       if(user) {

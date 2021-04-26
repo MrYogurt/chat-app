@@ -12,6 +12,7 @@ import { Routes_Enum } from '../../constants';
 import { gql, useQuery } from '@apollo/client';
 
 import { useStoreContext } from '../../context/store.context';
+
 const useStyles = makeStyles({
   root: {
     display: 'flex',

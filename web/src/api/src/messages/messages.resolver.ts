@@ -23,7 +23,6 @@ export class MessagesResolver {
 
   @Query(() => [MessageModel], { name: 'fetchMore' })
   async fetchMore(@Args('count') count: number) {
-    console.log('runned');
     return await this.messagesService.fetchMoreMessages(count);
   }
 }
