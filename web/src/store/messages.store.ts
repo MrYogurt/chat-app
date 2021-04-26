@@ -36,22 +36,60 @@ export class MessagesStore {
   }
 
   getInitialMessages = async () => {
-    await this.axios({
-      method: 'POST',
-      url: 'http://localhost:5000/chat',
-      data: { action: Actions_Enum.INITIALIZE_MESSAGES } }).then((result: any) => {
-        this.setMessages(result.data)
+
+      await this.axios({
+        method: "POST",
+          url: "http://localhost:5000/graphql",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          data: {
+            query: `query initializeMessages {
+              initializeMessages {
+                id
+                message
+                sender_name
+                sender_id
+                send_date
+              }
+          }`,
+        }
+      }).then((item: any) => {
+        this.setMessages(item.data.data.initializeMessages)
       })
   }
 
   fetchMoreMessages = async (countLoading: number) => {
-    const result = await this.axios({
-      method: 'POST',
-      url: 'http://localhost:5000/chat',
-      data: { count: countLoading, action: Actions_Enum.FETCH_MORE }}).then((result: any) => {
+    await this.axios({
+      method: "POST",
+          url: "http://localhost:5000/graphql",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          
+          data: {
+            query: `query fetchMore(${countLoading}: Number!) {
+              fetchMore(countLoading: ${countLoading}) {
+                id
+                message
+                sender_name
+                sender_id
+                send_date
+              }
+          }`,
+        }
+        
+
+     }).then((result: any) => {
+       console.log("result:", result)
         
         this.pushToMessageArray(result.data)
+      }).catch((err: any) => {
+        console.log("error:", err)
       })
+      
   }
 
   setMessages = (data: IMessage) => {

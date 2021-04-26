@@ -12,22 +12,14 @@ export class MessagesService {
     private usersRepository: Repository<Messages>,
   ) {}
 
-  async addMessage(data: {
-    sender_id?: string;
-    sender_name?: string;
-    msg?: string;
-  }) {
-    const senderId = data.sender_id;
-    const senderName = data.sender_name;
-    const msg = data.msg;
-
+  async addMessage(sender_id: string, sender_name: string, msg: string) {
     try {
       await this.usersRepository
         .createQueryBuilder()
         .insert()
         .into(Messages)
         .values([
-          { sender_id: senderId, sender_name: senderName, message: msg },
+          { sender_id: sender_id, sender_name: sender_name, message: msg },
         ])
         .execute();
     } catch (err) {

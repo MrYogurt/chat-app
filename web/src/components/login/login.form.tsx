@@ -9,8 +9,9 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import { Routes_Enum } from '../../constants';
 
-import { useStoreContext } from '../../context/store.context';
+import { gql, useQuery } from '@apollo/client';
 
+import { useStoreContext } from '../../context/store.context';
 const useStyles = makeStyles({
   root: {
     display: 'flex',
@@ -43,20 +44,21 @@ export const LoginForm: FC = observer(() => {
   const {
     authStore: { authStatus, setUser },
   } = useStoreContext()
+  
+  const [nickname, setName] = React.useState('');
+  const [errorName, setErrorName] = React.useState(false);
+  const [password, setPassword] = React.useState('');
+  const [errorPassword, setErrorPassword] = React.useState(false);
 
   const classes = useStyles();
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   const axios = require('axios').default;
 
-  const [name, setName] = React.useState('');
-  const [errorName, setErrorName] = React.useState(false);
-  const [password, setPassword] = React.useState('');
-  const [errorPassword, setErrorPassword] = React.useState(false);
-
+  
   const handleSubmit = async (event: any) => {
     event.preventDefault();
 
-    if (name.length < 6) {
+    if (nickname.length < 6) {
       setErrorName(true);
 
       return;
@@ -66,17 +68,39 @@ export const LoginForm: FC = observer(() => {
 
       return;
     } else {
-      const result = await axios({
-        method: 'POST',
-        url: 'http://localhost:5000/auth',
-        data: { nickname: name, password: password } })
 
-      if(result.data !== "") {
-        setUser(result)
+      await axios({
+        method: "POST",
+          url: "http://localhost:5000/graphql",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          data: {
+            variables: {
+              data: {
+                nickname,
+                password,
+              },
+            },
+            query: `query getUser($data: UserInput!) {
+              catchData(data: $data) {
+                id
+                nickname
+                registration_date
+              }
+          }`,
+          },
+      }).then((result: any) => {
+        setUser(result.data.data.catchData)
 
         setErrorName(false);
         setErrorPassword(false);
-      }
+
+      }).catch((err: string) => {
+        console.log("err:", err)
+      });
+      
     }
   };
 
@@ -105,7 +129,7 @@ export const LoginForm: FC = observer(() => {
         <Box mt="120px" display="flex" justifyContent="center">
           <TextField
             onChange={handleChangeName}
-            value={name}
+            value={nickname}
             id="outlined-nickname"
             label="Nickname"
             variant="outlined"

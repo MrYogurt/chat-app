@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { observable, action, computed, makeObservable } from "mobx"
 
-interface IUser {
+export interface IUser {
   id?: number
   nickname?: string
   registration_date?: string
@@ -32,14 +32,12 @@ export class AuthStore {
     }
   }
 
-  get getUser(): any {
+  get getUser(): IUser | undefined {
     return this.user
   }
 
-  setUser = (data: any) => {
-    const filteredData = data.data
-
-    this.user = filteredData
+  setUser = (data: IUser) => {
+    this.user = data
   }
 }
 

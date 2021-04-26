@@ -2,6 +2,35 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type UserModel {
+  id: Int
+  nickname: String!
+  password: String!
+  registration_date: String
+}
+
+type MessageModel {
+  id: ID
+  message: String
+  sender_name: String
+  sender_id: Int
+  send_date: String
+}
+
 type Query {
-  sayHello: String!
+  catchData(data: UserInput!): UserModel!
+  sendMessage(data: MessageInput!): MessageModel!
+  initializeMessages: [MessageModel!]!
+  fetchMore(count: Float!): [MessageModel!]!
+}
+
+input UserInput {
+  nickname: String!
+  password: String!
+}
+
+input MessageInput {
+  sender_id: Int!
+  sender_name: String!
+  message: String!
 }

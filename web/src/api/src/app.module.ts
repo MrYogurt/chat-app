@@ -13,7 +13,7 @@ import { UsersModule } from '../src/user/user.module';
 import { Messages } from '../src/entity/messages';
 import { MessagesModule } from '../src/messages/messages.module';
 import { join } from 'path';
-import { UserResolver } from './user/user.resolver';
+// import { UserResolver } from './user/user.resolver';
 
 @Module({
   imports: [
@@ -34,8 +34,8 @@ import { UserResolver } from './user/user.resolver';
     UsersModule,
     MessagesModule,
   ],
-  controllers: [AppController],
-  providers: [AppService, UserResolver],
+  // controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {
   constructor(private connection: Connection) {}

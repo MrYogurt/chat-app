@@ -7,6 +7,8 @@ import { useStoreContext } from '../../../context/store.context';
 import { observer } from 'mobx-react';
 import { toJS } from 'mobx';
 
+import { gql, useQuery } from '@apollo/client';
+
 const useStyles = makeStyles({
   root: {
     mt: '2vh',
@@ -24,11 +26,25 @@ const useStyles = makeStyles({
   },
 });
 
+const INITIALIZE_MESSAGES = gql`
+  query initializeMessages {
+    initializeMessages {
+      id
+      message
+      sender_name
+      sender_id
+      send_date
+      }  
+    }
+`;
+
 export const MessageWindow: FC = observer(() => {
   const {
     authStore: { getUser },
     messagesStore: { messages, getMessages, getInitialMessages, fetchMoreMessages },
   } = useStoreContext()
+
+  const { loading, error, data } = useQuery(INITIALIZE_MESSAGES)
   
   const classes = useStyles();
 
@@ -49,6 +65,7 @@ export const MessageWindow: FC = observer(() => {
 
   useEffect(() => {
     const user = toJS(getUser)
+    console.log("checkData:", data, INITIALIZE_MESSAGES)
     
     if (!messages) {
       if(user) {
@@ -59,13 +76,13 @@ export const MessageWindow: FC = observer(() => {
     }
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [getMessages, getUser])
+  }, [messages, getUser])
 
   
 
   return (
     <Box className={classes.root} onScroll={handleScroll}>
-      {getMessages ? <MessageItems messages={getMessages} user={getUser} messagesEndRef={messagesEndRef}/> : null}
+      {messages ? <MessageItems messages={messages} user={getUser} messagesEndRef={messagesEndRef}/> : null}
     </Box>
   );
 });
