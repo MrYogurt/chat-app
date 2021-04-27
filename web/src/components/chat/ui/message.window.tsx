@@ -28,7 +28,7 @@ const useStyles = makeStyles({
 
 export const MessageWindow: FC = () => {
   const {
-    authStore: { getUser },
+    authStore: { getUser, authStatus },
   } = useStoreContext()
 
   const { data, fetchMore } = useQuery(FETCH_MORE, {
@@ -59,6 +59,12 @@ export const MessageWindow: FC = () => {
             offset: data.fetchMore.length,
           },
           updateQuery: (previous: any, { fetchMoreResult }: any) => {
+
+            if(!fetchMoreResult) {
+              setMessages(previous)
+
+              return
+            }
             
             const result = [...fetchMoreResult.fetchMore, ...previous.fetchMore];
 
@@ -71,24 +77,21 @@ export const MessageWindow: FC = () => {
   }
 
   useEffect(() => {
-    const user = toJS(getUser)
 
-    if (data) {
-      if(user) {
-        if(!messages) {
-          setMessages(data.fetchMore)
-        }
+    if (authStatus) {
+      if (data) {
+          if(!messages) {
+            setMessages(data.fetchMore)
+          }
       }
-    }
-
-    if(messages?.length < 21) {
-      if (user) {
-        scrollOnLoad()
+  
+      if(messages?.length < 21) {
+          scrollOnLoad()
       }
     }
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, messages, getUser])
+  }, [data, messages, authStatus])
 
   
 
