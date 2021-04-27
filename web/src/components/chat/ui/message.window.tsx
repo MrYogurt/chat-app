@@ -1,13 +1,13 @@
-import React, { FC, useEffect, useRef } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 
 import { Box, makeStyles } from '@material-ui/core';
 
 import { MessageItems } from './message.items';
 import { useStoreContext } from '../../../context/store.context';
-import { observer } from 'mobx-react';
 import { toJS } from 'mobx';
 
-import { gql, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
+import { FETCH_MORE } from '../queries/queries';
 
 const useStyles = makeStyles({
   root: {
@@ -26,25 +26,19 @@ const useStyles = makeStyles({
   },
 });
 
-// const INITIALIZE_MESSAGES = gql`
-//   query initializeMessages {
-//     initializeMessages {
-//       id
-//       message
-//       sender_name
-//       sender_id
-//       send_date
-//       }  
-//     }
-// `;
-
-export const MessageWindow: FC = observer(() => {
+export const MessageWindow: FC = () => {
   const {
     authStore: { getUser },
-    messagesStore: { messages, getMessages, getInitialMessages, fetchMoreMessages },
   } = useStoreContext()
 
-  // const { loading, error, data } = useQuery(INITIALIZE_MESSAGES)
+  const { data, fetchMore } = useQuery(FETCH_MORE, {
+    variables: {
+      offset: 0,
+      limit: 20,
+    }
+  })
+
+  const [ messages, setMessages ] = useState<any>()
   
   const classes = useStyles();
 
@@ -59,24 +53,42 @@ export const MessageWindow: FC = observer(() => {
     const target = event.target as HTMLUListElement
 
       if (target.scrollTop === 0) {
-        fetchMoreMessages(messages.length)
+
+        fetchMore({
+          variables: {
+            offset: data.fetchMore.length,
+          },
+          updateQuery: (previous: any, { fetchMoreResult }: any) => {
+            
+            const result = [...fetchMoreResult.fetchMore, ...previous.fetchMore];
+
+            setMessages(result)
+
+            return result;
+          }
+        })     
       }
   }
 
   useEffect(() => {
     const user = toJS(getUser)
-    // console.log("checkData:", data, INITIALIZE_MESSAGES)
-    
-    if (!messages) {
+
+    if (data) {
       if(user) {
-        getInitialMessages().then(() => {
-          scrollOnLoad()
-        })
+        if(!messages) {
+          setMessages(data.fetchMore)
+        }
+      }
+    }
+
+    if(messages?.length < 21) {
+      if (user) {
+        scrollOnLoad()
       }
     }
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [messages, getUser])
+  }, [data, messages, getUser])
 
   
 
@@ -85,4 +97,4 @@ export const MessageWindow: FC = observer(() => {
       {messages ? <MessageItems messages={messages} user={getUser} messagesEndRef={messagesEndRef}/> : null}
     </Box>
   );
-});
+};

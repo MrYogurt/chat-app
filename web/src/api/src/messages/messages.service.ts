@@ -39,12 +39,12 @@ export class MessagesService {
       .getMany();
   }
 
-  async fetchMoreMessages(count: number): Promise<any> {
+  async fetchMoreMessages(offset: number, limit: number): Promise<any> {
     return await this.usersRepository
       .createQueryBuilder('messages')
       .orderBy('messages.id', 'DESC')
-      .skip(count)
-      .take(20)
+      .skip(offset)
+      .take(limit)
       .getMany();
   }
 }

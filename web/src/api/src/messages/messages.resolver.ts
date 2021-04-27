@@ -25,15 +25,16 @@ export class MessagesResolver {
   }
 
   @Query(() => [MessageModel], { name: 'fetchMore' })
-  async fetchMore(@Args('count') count: number) {
-    return await this.messagesService.fetchMoreMessages(count);
+  async fetchMore(
+    @Args('offset') offset: number,
+    @Args('limit') limit: number,
+  ) {
+    console.log('kavo:', offset, limit);
+    return await this.messagesService.fetchMoreMessages(offset, limit);
   }
 
-  @Subscription((returns) => MessageModel, {
-    filter: (payload, variables) =>
-      payload.commentAdded.title === variables.title,
-  })
-  messageAdded(@Args('title') title: string) {
+  @Subscription(() => MessageModel)
+  messageAdded() {
     return pubSub.asyncIterator('messageAdded');
   }
 }

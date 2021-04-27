@@ -4,6 +4,7 @@ import { observable, action, computed, makeObservable, toJS } from "mobx"
 import { Actions_Enum } from './../constants';
 
 interface IMessage {
+  __typename: string
   id?: number
   message: string
   sender_name: string
@@ -90,9 +91,9 @@ export class MessagesStore {
   }
 
   setMessages = (data: IMessage) => {
-    const parsedData = toJS(data)
+    // const parsedData = toJS(data)
 
-    this.messages = parsedData
+    this.messages = data
   }
 
   pushToMessageArray = (data: any) => {
@@ -102,7 +103,7 @@ export class MessagesStore {
   }
 
   get getMessages(): IMessage | undefined {
-    return toJS(this.messages)
+    return this.messages
   }
 }
 

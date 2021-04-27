@@ -42,10 +42,11 @@ const useStyles = makeStyles({
 });
 
 const SEND_FORM = gql`
-  query catchData {
-    catchData {
-      nickname,
-      password,
+  query sendData($nickname: String!, $password: String!) {
+    catchData(nickname: $nickname, password: $password) {
+      id
+      nickname
+      registration_date
     }
   }
 `;
@@ -60,14 +61,12 @@ export const LoginForm: FC = observer(() => {
   const [password, setPassword] = React.useState('');
   const [errorPassword, setErrorPassword] = React.useState(false);
 
-  const [getDog, { loading, data }] = useLazyQuery(SEND_FORM, {
-    variables: { nickname, password},
+  const [sendData, { loading, data }] = useLazyQuery(SEND_FORM, {
+    variables: { nickname, password },
   });
 
   const classes = useStyles();
   // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const axios = require('axios').default;
-
   
   const handleSubmit = async (event: any) => {
     event.preventDefault();
@@ -82,47 +81,16 @@ export const LoginForm: FC = observer(() => {
 
       return;
     } else {
-
-      // await axios({
-      //   method: "POST",
-      //     url: "http://localhost:5000/graphql",
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //       Accept: "application/json",
-      //     },
-      //     data: {
-      //       variables: {
-      //         data: {
-      //           nickname,
-      //           password,
-      //         },
-      //       },
-      //       query: `query getUser($data: UserInput!) {
-      //         catchData(data: $data) {
-      //           id
-      //           nickname
-      //           registration_date
-      //         }
-      //     }`,
-      //     },
-      // }).then((result: any) => {
-      //   setUser(result.data.data.catchData)
-
-      //   setErrorName(false);
-      //   setErrorPassword(false);
-
-      // }).catch((err: string) => {
-      //   console.log("err:", err)
-      // });
-
-      // setUser(result.data.data.catchData)
-
-      getDog()
-
-      setErrorName(false);
-      setErrorPassword(false);
+      sendData()
     }
   };
+
+  const fillUser = () => {
+    setUser(data)
+
+    setErrorName(false);
+    setErrorPassword(false);
+  }
 
   const handleChangePassword = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(event.target.value);
@@ -141,7 +109,10 @@ export const LoginForm: FC = observer(() => {
     if (authStatus) {
       history.push(Routes_Enum.CHAT);
     }
-  }, [history, authStatus]);
+    if(data) {
+      fillUser()
+    }
+  }, [history, data]);
 
   return (
     <Box className={classes.root}>
@@ -170,7 +141,7 @@ export const LoginForm: FC = observer(() => {
           />
         </Box>
         <Box mt="20px" display="flex" justifyContent="center">
-          <Button type="submit" className={classes.button}>
+          <Button disabled={loading} type="submit" className={classes.button}>
             Login
           </Button>
         </Box>

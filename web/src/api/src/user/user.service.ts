@@ -12,18 +12,14 @@ export class UserService {
     private usersRepository: Repository<User>,
   ) {}
 
-  async checkExistenceUser(data: any): Promise<any> {
-    const result = await this.usersRepository
+  async checkExistenceUser(name: string): Promise<any> {
+    return await this.usersRepository
       .createQueryBuilder('user')
-      .where('user.nickname = :nickname', { nickname: data.nickname })
+      .where('user.nickname = :nickname', { nickname: name })
       .getOne();
-
-    return result;
   }
 
-  async addUser(data: { nickname: string; password: string }): Promise<any> {
-    const nickname = data.nickname;
-    const password = data.password;
+  async addUser(nickname: string, password: string): Promise<any> {
     try {
       const result = await this.usersRepository
         .createQueryBuilder()

@@ -18,15 +18,10 @@ type MessageModel {
 }
 
 type Query {
-  catchData(data: UserInput!): UserModel!
+  catchData(password: String!, nickname: String!): UserModel!
   sendMessage(data: MessageInput!): MessageModel!
   initializeMessages: [MessageModel!]!
-  fetchMore(count: Float!): [MessageModel!]!
-}
-
-input UserInput {
-  nickname: String!
-  password: String!
+  fetchMore(limit: Float!, offset: Float!): [MessageModel!]!
 }
 
 input MessageInput {
