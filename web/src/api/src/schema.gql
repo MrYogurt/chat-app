@@ -34,3 +34,7 @@ input MessageInput {
   sender_name: String!
   message: String!
 }
+
+type Subscription {
+  messageAdded(title: String!): MessageModel!
+}

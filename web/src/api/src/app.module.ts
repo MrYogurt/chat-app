@@ -30,6 +30,7 @@ import { join } from 'path';
     }),
     GraphQLModule.forRoot({
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+      installSubscriptionHandlers: true,
     }),
     UsersModule,
     MessagesModule,

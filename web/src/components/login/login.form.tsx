@@ -9,7 +9,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import { Routes_Enum } from '../../constants';
 
-import { gql, useQuery } from '@apollo/client';
+import { gql, useLazyQuery } from '@apollo/client';
 
 import { useStoreContext } from '../../context/store.context';
 
@@ -41,6 +41,15 @@ const useStyles = makeStyles({
   },
 });
 
+const SEND_FORM = gql`
+  query catchData {
+    catchData {
+      nickname,
+      password,
+    }
+  }
+`;
+
 export const LoginForm: FC = observer(() => {
   const {
     authStore: { authStatus, setUser },
@@ -50,6 +59,10 @@ export const LoginForm: FC = observer(() => {
   const [errorName, setErrorName] = React.useState(false);
   const [password, setPassword] = React.useState('');
   const [errorPassword, setErrorPassword] = React.useState(false);
+
+  const [getDog, { loading, data }] = useLazyQuery(SEND_FORM, {
+    variables: { nickname, password},
+  });
 
   const classes = useStyles();
   // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -70,38 +83,44 @@ export const LoginForm: FC = observer(() => {
       return;
     } else {
 
-      await axios({
-        method: "POST",
-          url: "http://localhost:5000/graphql",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-          data: {
-            variables: {
-              data: {
-                nickname,
-                password,
-              },
-            },
-            query: `query getUser($data: UserInput!) {
-              catchData(data: $data) {
-                id
-                nickname
-                registration_date
-              }
-          }`,
-          },
-      }).then((result: any) => {
-        setUser(result.data.data.catchData)
+      // await axios({
+      //   method: "POST",
+      //     url: "http://localhost:5000/graphql",
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //       Accept: "application/json",
+      //     },
+      //     data: {
+      //       variables: {
+      //         data: {
+      //           nickname,
+      //           password,
+      //         },
+      //       },
+      //       query: `query getUser($data: UserInput!) {
+      //         catchData(data: $data) {
+      //           id
+      //           nickname
+      //           registration_date
+      //         }
+      //     }`,
+      //     },
+      // }).then((result: any) => {
+      //   setUser(result.data.data.catchData)
 
-        setErrorName(false);
-        setErrorPassword(false);
+      //   setErrorName(false);
+      //   setErrorPassword(false);
 
-      }).catch((err: string) => {
-        console.log("err:", err)
-      });
-      
+      // }).catch((err: string) => {
+      //   console.log("err:", err)
+      // });
+
+      // setUser(result.data.data.catchData)
+
+      getDog()
+
+      setErrorName(false);
+      setErrorPassword(false);
     }
   };
 
