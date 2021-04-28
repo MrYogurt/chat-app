@@ -58,8 +58,11 @@ export const Chat: FC = () => {
 
       <Box mt="5vh" mb="10vh" className={classes.chatWindow}>
         <Box display="flex" flexDirection="column">
+          {authStatus ? 
+          <>
           <MessageWindow />
           <InputMessage />
+          </> : null}
         </Box>
       </Box>
     </Box>

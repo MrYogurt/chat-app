@@ -1,4 +1,4 @@
-import { FC, useLayoutEffect } from 'react';
+import React, { FC, Fragment, useLayoutEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { observer } from "mobx-react"
@@ -7,6 +7,7 @@ import { Routes_Enum } from '../constants';
 import { useStoreContext } from '../context/store.context';
 
 import { LoginForm } from './login/login.form';
+import { Chat } from './chat/chat';
 
 export const AuthPage: FC = observer(() => {
   const {
@@ -19,6 +20,10 @@ export const AuthPage: FC = observer(() => {
   useLayoutEffect(() => {
     if (isAuth) {
       history.push(Routes_Enum.CHAT);
+    }
+
+    if (!isAuth) {
+      history.push(Routes_Enum.AUTH);
     }
   }, [history, isAuth]);
 

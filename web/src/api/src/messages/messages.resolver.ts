@@ -12,11 +12,13 @@ export class MessagesResolver {
 
   @Query(() => MessageModel, { name: 'sendMessage' })
   async sendMessage(@Args('data') data: MessageInput) {
-    return await this.messagesService.addMessage(
-      data.sender_id,
-      data.sender_name,
-      data.message,
-    );
+    return await this.messagesService
+      .addMessage(data.sender_id, data.sender_name, data.message)
+      .then((message) => {
+        pubSub.publish('messageAdded', { messageAdded: message });
+
+        return message;
+      });
   }
 
   @Query(() => [MessageModel], { name: 'initializeMessages' })
@@ -29,7 +31,6 @@ export class MessagesResolver {
     @Args('offset') offset: number,
     @Args('limit') limit: number,
   ) {
-    console.log('kavo:', offset, limit);
     return await this.messagesService.fetchMoreMessages(offset, limit);
   }
 

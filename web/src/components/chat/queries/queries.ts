@@ -23,3 +23,25 @@ export const FETCH_MORE = gql`
       }  
     }
 `
+
+export const MESSAGE_SUBSCRIPTION = gql`
+  subscription messageAdded {
+    messageAdded {
+        id
+        sender_id
+        sender_name
+        message
+    }
+  }
+`;
+
+export const SEND_MESSAGE = gql`
+  query sendMessage($data: MessageInput!) {
+    sendMessage(data: $data) {
+        id
+        sender_id
+        sender_name
+        message
+    }
+  }
+`;

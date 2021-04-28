@@ -4,10 +4,9 @@ import { Box, makeStyles } from '@material-ui/core';
 
 import { MessageItems } from './message.items';
 import { useStoreContext } from '../../../context/store.context';
-import { toJS } from 'mobx';
 
-import { useQuery } from '@apollo/client';
-import { FETCH_MORE } from '../queries/queries';
+import { useQuery, useSubscription } from '@apollo/client';
+import { FETCH_MORE, MESSAGE_SUBSCRIPTION } from '../queries/queries';
 
 const useStyles = makeStyles({
   root: {
@@ -38,6 +37,8 @@ export const MessageWindow: FC = () => {
     }
   })
 
+  const { ...rest } = useSubscription(MESSAGE_SUBSCRIPTION);
+
   const [ messages, setMessages ] = useState<any>()
   
   const classes = useStyles();
@@ -66,7 +67,7 @@ export const MessageWindow: FC = () => {
               return
             }
             
-            const result = [...fetchMoreResult.fetchMore, ...previous.fetchMore];
+            const result = [...previous.fetchMore, ...fetchMoreResult.fetchMore];
 
             setMessages(result)
 
@@ -88,10 +89,28 @@ export const MessageWindow: FC = () => {
       if(messages?.length < 21) {
           scrollOnLoad()
       }
+
+      if (rest.loading === false) {
+        scrollOnLoad()
+      }
     }
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, messages, authStatus])
+
+  useEffect(() => {
+
+    if (authStatus) {
+      if(messages) {
+        if(rest?.data?.messageAdded?.message.length >= 1) {
+            
+            setMessages((prev: any) => [rest.data.messageAdded, ...prev])
+        }
+      }
+    }
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [rest?.data?.messageAdded])
 
   
 

@@ -14,7 +14,7 @@ export class MessagesService {
 
   async addMessage(sender_id: string, sender_name: string, msg: string) {
     try {
-      await this.usersRepository
+      const result = await this.usersRepository
         .createQueryBuilder()
         .insert()
         .into(Messages)
@@ -22,6 +22,14 @@ export class MessagesService {
           { sender_id: sender_id, sender_name: sender_name, message: msg },
         ])
         .execute();
+
+      return {
+        id: result.generatedMaps[0].id,
+        sender_id: sender_id,
+        sender_name: sender_name,
+        message: msg,
+        send_date: result.generatedMaps[0].send_date,
+      };
     } catch (err) {
       console.log('add message error:', err);
     }

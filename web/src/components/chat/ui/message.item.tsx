@@ -14,6 +14,7 @@ const useStyles = makeStyles<Theme>((theme) => ({
     boxShadow: '0 0 3px',
     padding: 10,
     marginTop: "30px",
+    maxWidth: '80%',
   },
   out: {
     display: 'flex',

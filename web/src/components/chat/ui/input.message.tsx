@@ -1,15 +1,14 @@
 import React, { FC } from 'react';
 
-import { toJS } from 'mobx';
-
 import { Box } from '@material-ui/core';
 
-import { Actions_Enum } from '../../../constants';
 import { useStoreContext } from '../../../context/store.context';
 import { Row } from '../../ui/row';
 
 import { SendMessageSubmit } from './submit.button';
 import { TextFieldMessage } from './text.field.message';
+import { SEND_MESSAGE } from '../queries/queries';
+import { useLazyQuery } from '@apollo/client';
 
 
 export const InputMessage: FC = () => {
@@ -19,59 +18,24 @@ export const InputMessage: FC = () => {
 
   const [message, setMessage] = React.useState('');
 
-  const axios = require('axios');
+  const [ sendMessage ] = useLazyQuery(SEND_MESSAGE)
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const user = toJS(getUser)
-
-    if(user) {
-      const sender_id = user.id
-      const sender_name = user.nickname
-
-      await axios({
-        method: "POST",
-          url: "http://localhost:5000/graphql",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
+    if(getUser && message.length >= 1) {
+      sendMessage({
+        variables: {
           data: {
-            variables: {
-              data: {
-                sender_id,
-                sender_name,
-                message,
-              },
-            },
-            query: `query sendMessage($data: MessageInput!) {
-              sendMessage(data: $data) {
-                sender_id
-                sender_name
-                message
-              }
-          }`,
-          },
-      }).then(() => {
-        console.log("successful")
-        setMessage("")
-      }).catch((err: string) => {
-        console.log("error:", err)
-        setMessage("")
+            sender_id: getUser?.catchData.id,
+            sender_name: getUser?.catchData.nickname,
+            message: message
+          }
+        }
       })
 
-      // await axios({
-      //   method: 'POST',
-      //   url: 'http://localhost:5000/chat',
-      //   data: { sender_id: user.id, sender_name: user.nickname, msg: message, action: Actions_Enum.ADD_MESSAGE }
-      // }).then(() => {
-      //   console.log("successful")
-      //   setMessage("")
-      // }).catch((err: string) => {
-      //   console.log("error:", err)
-      //   setMessage("")
-      // })
+      setMessage("")
+      
     }
   };
 

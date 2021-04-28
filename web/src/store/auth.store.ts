@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { observable, action, computed, makeObservable } from "mobx"
+import { observable, action, computed, makeObservable, toJS } from "mobx"
 
 export interface IUser {
   id?: number
@@ -32,8 +32,8 @@ export class AuthStore {
     }
   }
 
-  get getUser(): IUser | undefined {
-    return this.user
+  get getUser(): any {
+    return toJS(this.user)
   }
 
   setUser = (data: IUser) => {

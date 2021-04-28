@@ -31,5 +31,5 @@ input MessageInput {
 }
 
 type Subscription {
-  messageAdded(title: String!): MessageModel!
+  messageAdded: MessageModel!
 }

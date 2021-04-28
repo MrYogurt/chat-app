@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC } from 'react';
 
 import { List, makeStyles } from '@material-ui/core';
 
@@ -22,15 +22,17 @@ interface IMessageItems {
 export const MessageItems: FC <IMessageItems> = ({messages, user, messagesEndRef}) => {
   const classes = useStyles();
 
+  const reversedMessages = [...messages].reverse()
+
   return (
     <List className={classes.root}>
       
-      {messages && messages.map((item:any) => {
+      {reversedMessages && reversedMessages.map((item:any, index: number) => {
         const parsedUser = toJS(user)
 
-        if(parsedUser?.nickname !== item.sender_name) {
+        if(parsedUser?.catchData.nickname !== item.sender_name) {
           return (
-          <MessageItem key={item.id} direction={"in"} senderName={item.sender_name} message={item.message}/>
+            <MessageItem key={item.id} direction={"in"} senderName={item.sender_name} message={item.message}/>
           )
         } else {
           return (
