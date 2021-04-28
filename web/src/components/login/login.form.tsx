@@ -112,7 +112,8 @@ export const LoginForm: FC = observer(() => {
     if(data) {
       fillUser()
     }
-  }, [history, data]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [history, authStatus, data]);
 
   return (
     <Box className={classes.root}>

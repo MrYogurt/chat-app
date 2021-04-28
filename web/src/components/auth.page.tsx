@@ -7,7 +7,6 @@ import { Routes_Enum } from '../constants';
 import { useStoreContext } from '../context/store.context';
 
 import { LoginForm } from './login/login.form';
-import { Chat } from './chat/chat';
 
 export const AuthPage: FC = observer(() => {
   const {

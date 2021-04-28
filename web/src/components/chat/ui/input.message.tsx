@@ -40,7 +40,7 @@ export const InputMessage: FC = () => {
   };
 
   return (
-    <Box mt="10px" ml="15%" display="flex" justifyContent="center">
+    <Box mt="20px" mb="10px" ml="15%" display="flex" justifyContent="center">
       <form onSubmit={handleSubmit}>
         <Row
           left={<TextFieldMessage message={message} setMessage={setMessage} />}
