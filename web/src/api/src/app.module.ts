@@ -1,7 +1,7 @@
+import { AuthModule } from './auth/auth.module';
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 
-import { AppController } from '../src/app.controller';
 import { AppService } from '../src/app.service';
 
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -13,7 +13,6 @@ import { UsersModule } from '../src/user/user.module';
 import { Messages } from '../src/entity/messages';
 import { MessagesModule } from '../src/messages/messages.module';
 import { join } from 'path';
-// import { UserResolver } from './user/user.resolver';
 
 @Module({
   imports: [
@@ -32,10 +31,10 @@ import { join } from 'path';
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       installSubscriptionHandlers: true,
     }),
+    AuthModule,
     UsersModule,
     MessagesModule,
   ],
-  // controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {

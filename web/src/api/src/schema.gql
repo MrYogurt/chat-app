@@ -2,11 +2,18 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type TokenModel {
+  sub: Float
+  iat: Float
+  exp: Float
+}
+
 type UserModel {
   id: Int
   nickname: String!
   password: String!
   registration_date: String
+  access_token: String
 }
 
 type MessageModel {
@@ -18,7 +25,8 @@ type MessageModel {
 }
 
 type Query {
-  catchData(password: String!, nickname: String!): UserModel!
+  login(password: String!, nickname: String!): UserModel!
+  checkAuth(token: String!): TokenModel
   sendMessage(data: MessageInput!): MessageModel!
   initializeMessages: [MessageModel!]!
   fetchMore(limit: Float!, offset: Float!): [MessageModel!]!

@@ -13,4 +13,7 @@ export class UserModel {
 
   @Field({ nullable: true })
   registration_date?: string;
+
+  @Field({ nullable: true })
+  access_token!: string;
 }
