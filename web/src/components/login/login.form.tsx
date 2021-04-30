@@ -9,9 +9,10 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import { Routes_Enum } from '../../constants';
 
-import { gql, useLazyQuery } from '@apollo/client';
+import { useLazyQuery } from '@apollo/client';
 
 import { useStoreContext } from '../../context/store.context';
+import { SEND_FORM } from '../chat/queries/queries';
 
 const useStyles = makeStyles({
   root: {
@@ -41,19 +42,9 @@ const useStyles = makeStyles({
   },
 });
 
-const SEND_FORM = gql`
-  query sendData($nickname: String!, $password: String!) {
-    catchData(nickname: $nickname, password: $password) {
-      id
-      nickname
-      registration_date
-    }
-  }
-`;
-
 export const LoginForm: FC = observer(() => {
   const {
-    authStore: { authStatus, setUser },
+    authStore: { isAuth, setUser },
   } = useStoreContext()
   
   const [nickname, setName] = React.useState('');
@@ -86,10 +77,16 @@ export const LoginForm: FC = observer(() => {
   };
 
   const fillUser = () => {
-    setUser(data)
+    localStorage.setItem('token', data.login.access_token)
 
-    setErrorName(false);
-    setErrorPassword(false);
+    if (localStorage.getItem('token')) {
+      setErrorName(false);
+      setErrorPassword(false);
+
+      setUser(data)
+
+      history.push(Routes_Enum.CHAT);
+    }   
   }
 
   const handleChangePassword = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -103,17 +100,17 @@ export const LoginForm: FC = observer(() => {
   const history = useHistory();
 
   useEffect(() => {
-    if (!authStatus) {
+    if (!isAuth) {
       history.push(Routes_Enum.AUTH);
     }
-    if (authStatus) {
+    if (isAuth) {
       history.push(Routes_Enum.CHAT);
     }
     if(data) {
       fillUser()
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [history, authStatus, data]);
+  }, [history, isAuth, data]);
 
   return (
     <Box className={classes.root}>

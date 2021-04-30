@@ -27,7 +27,7 @@ const useStyles = makeStyles({
 
 export const MessageWindow: FC = () => {
   const {
-    authStore: { getUser, authStatus },
+    authStore: { getUser, isAuth },
   } = useStoreContext()
 
   const { data, fetchMore } = useQuery(FETCH_MORE, {
@@ -79,7 +79,7 @@ export const MessageWindow: FC = () => {
 
   useEffect(() => {
 
-    if (authStatus) {
+    if (isAuth) {
       if (data) {
           if(!messages) {
             setMessages(data.fetchMore)
@@ -96,11 +96,11 @@ export const MessageWindow: FC = () => {
     }
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, messages, authStatus])
+  }, [data, messages, isAuth])
 
   useEffect(() => {
 
-    if (authStatus) {
+    if (isAuth) {
       if(messages) {
         if(rest?.data?.messageAdded?.message.length >= 1) {
             

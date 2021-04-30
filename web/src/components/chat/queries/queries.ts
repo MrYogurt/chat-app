@@ -45,3 +45,24 @@ export const SEND_MESSAGE = gql`
     }
   }
 `;
+
+export const SEND_FORM = gql`
+  query login($nickname: String!, $password: String!) {
+    login(nickname: $nickname, password: $password) {
+      id
+      nickname
+      registration_date
+      access_token
+    }
+  }
+`;
+
+export const CHECK_AUTH = gql`
+  query checkAuth($token: String!) {
+    checkAuth (token: $token){
+        sub
+    		iat
+    		exp
+    }
+  }
+`;

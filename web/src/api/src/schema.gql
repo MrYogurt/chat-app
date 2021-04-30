@@ -27,6 +27,7 @@ type MessageModel {
 type Query {
   login(password: String!, nickname: String!): UserModel!
   checkAuth(token: String!): TokenModel
+  whoAmI: UserModel!
   sendMessage(data: MessageInput!): MessageModel!
   initializeMessages: [MessageModel!]!
   fetchMore(limit: Float!, offset: Float!): [MessageModel!]!

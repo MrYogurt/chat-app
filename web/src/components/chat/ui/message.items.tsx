@@ -2,8 +2,6 @@ import React, { FC } from 'react';
 
 import { List, makeStyles } from '@material-ui/core';
 
-import { toJS } from 'mobx';
-
 import { MessageItem } from './message.item';
 
 const useStyles = makeStyles( {
@@ -27,10 +25,11 @@ export const MessageItems: FC <IMessageItems> = ({messages, user, messagesEndRef
   return (
     <List className={classes.root}>
       
-      {reversedMessages && reversedMessages.map((item:any, index: number) => {
-        const parsedUser = toJS(user)
+      {reversedMessages && reversedMessages.map((item:any) => {
 
-        if(parsedUser?.catchData.nickname !== item.sender_name) {
+        console.log("user:", user)
+
+        if(user.login.nickname !== item.sender_name) {
           return (
             <MessageItem key={item.id} direction={"in"} senderName={item.sender_name} message={item.message}/>
           )

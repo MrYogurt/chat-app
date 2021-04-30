@@ -36,20 +36,20 @@ const useStyles = makeStyles({
 
 export const Chat: FC = () => {
   const {
-    authStore: { authStatus },
+    authStore: { isAuth },
   } = useStoreContext()
 
   const classes = useStyles();
   const history = useHistory();
 
   useLayoutEffect(() => {
-    if (!authStatus) {
+    if (!isAuth) {
       history.push(Routes_Enum.AUTH);
     }
-    if (authStatus) {
+    if (isAuth) {
       history.push(Routes_Enum.CHAT);
     }
-  }, [history, authStatus])
+  }, [history, isAuth])
   return (
     <Box className={classes.root}>
       <Box mt="5vh" className={classes.header}>
@@ -58,7 +58,7 @@ export const Chat: FC = () => {
 
       <Box mt="5vh" mb="10vh" className={classes.chatWindow}>
         <Box display="flex" flexDirection="column">
-          {authStatus ? 
+          {isAuth ? 
           <>
           <MessageWindow />
           <InputMessage />

@@ -8,7 +8,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Connection } from 'typeorm';
 
 import { User } from '../src/entity/user';
-import { UsersModule } from '../src/user/user.module';
+// import { UsersModule } from '../src/user/user.module';
 
 import { Messages } from '../src/entity/messages';
 import { MessagesModule } from '../src/messages/messages.module';
@@ -32,7 +32,7 @@ import { join } from 'path';
       installSubscriptionHandlers: true,
     }),
     AuthModule,
-    UsersModule,
+    // UsersModule,
     MessagesModule,
   ],
   providers: [AppService],
