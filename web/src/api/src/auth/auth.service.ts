@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Repository } from 'typeorm';
@@ -65,6 +66,15 @@ export class AuthService {
     }
   }
 
+  async addToken(id: number, key: string): Promise<any> {
+    await this.usersRepository
+      .createQueryBuilder()
+      .update(User)
+      .set({ token: key })
+      .where('id = :id', { id: id })
+      .execute();
+  }
+
   login(user: any) {
     const payload = { username: user.username, sub: user.id };
     return {
@@ -72,8 +82,22 @@ export class AuthService {
     };
   }
 
+  async whoAmIService(token: string) {
+    const result = await this.usersRepository
+      .createQueryBuilder('user')
+      .where('user.token = :token', { token: token })
+      .getOne();
+
+    const parsed = {
+      id: result?.id,
+      nickname: result?.nickname,
+      registration_date: result?.registration_date,
+    };
+    return parsed;
+  }
+
   async checkAuth(token: string) {
-    return await this.jwtService
+    return this.jwtService
       .verifyAsync(token)
       .then((result) => {
         return result;

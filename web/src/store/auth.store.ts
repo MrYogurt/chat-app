@@ -22,24 +22,12 @@ export class AuthStore {
     makeObservable(this, {
       user: observable,
       isAuth: observable,
-      authStatus: computed,
       getUser: computed,
       setUser: action,
     })
   }
 
-  get authStatus(): boolean | undefined {
-    if (this.user === undefined) {
-      return false
-    } else if (!this.user) {
-      return false
-    } else {
-      return true
-    }
-  }
-
   get getUser(): any {
-    console.log("user228:", this.user)
     return toJS(this.user)
   }
 
@@ -47,37 +35,8 @@ export class AuthStore {
     this.isAuth = status
   }
 
-  // checkAuth = async (token: string) => {
-  //   console.log("token:", token)
-  //   await this.axios({
-  //     method: "POST",
-  //         url: "http://localhost:5000/graphql",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           Accept: "application/json",
-  //         },
-  //         data: {
-  //           query: `query checkAuth($token: String!) {
-  //             checkAuth (token: $token){
-  //                 sub
-  //                 iat
-  //                 exp
-  //             }
-  //           }`,
-  //       },
-  //       variables: {
-  //         token: token
-  //       }
-  //    }).then((result: any) => {
-  //       this.isAuth = true
-  //       console.log("result:", result)
-  //     }).catch((err: any) => {
-  //       this.isAuth = false
-  //       console.log("error:", err)
-  //     })
-  // }
-
   setUser = (data: IUser) => {
+    console.log("store user:", data)
     this.user = data
   }
 }

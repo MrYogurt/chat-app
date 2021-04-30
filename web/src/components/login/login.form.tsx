@@ -44,8 +44,10 @@ const useStyles = makeStyles({
 
 export const LoginForm: FC = observer(() => {
   const {
-    authStore: { isAuth, setUser },
+    authStore: { isAuth, setUser, getUser },
   } = useStoreContext()
+
+  const history = useHistory();
   
   const [nickname, setName] = React.useState('');
   const [errorName, setErrorName] = React.useState(false);
@@ -97,20 +99,20 @@ export const LoginForm: FC = observer(() => {
     setName(event.target.value);
   };
 
-  const history = useHistory();
-
   useEffect(() => {
-    if (!isAuth) {
-      history.push(Routes_Enum.AUTH);
-    }
+    // if (!isAuth) {
+    //   history.push(Routes_Enum.AUTH);
+    // }
     if (isAuth) {
-      history.push(Routes_Enum.CHAT);
+      if (data) {
+        fillUser()
+      }
     }
-    if(data) {
-      fillUser()
-    }
+    
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [history, isAuth, data]);
+
+  console.log("login form user:", getUser)
 
   return (
     <Box className={classes.root}>

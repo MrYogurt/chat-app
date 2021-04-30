@@ -1,3 +1,4 @@
+import { User } from './../entity/user';
 import { UseGuards } from '@nestjs/common';
 import { Args, Query, Resolver } from '@nestjs/graphql';
 import { TokenModel } from '../../src/models/token.model';
@@ -32,7 +33,7 @@ export class AuthResolver {
         access_token: token.access_token,
       };
 
-      this.authService.checkAuth(token.access_token);
+      this.authService.addToken(resultAddUser.id, token.access_token);
 
       return result;
     }
@@ -46,6 +47,8 @@ export class AuthResolver {
       access_token: token.access_token,
     };
 
+    this.authService.addToken(resultSearchUser.id, token.access_token);
+
     return result;
   }
 
@@ -56,12 +59,9 @@ export class AuthResolver {
 
   @Query(() => UserModel)
   @UseGuards(JwtAuthGuard)
-  async whoAmI(@CurrentUser() nickname: string) {
-    console.log(await this.authService.checkExistenceUser(nickname));
-    // const { password, ...rest } = await this.authService.checkExistenceUser(
-    //   nickname,
-    // );
+  async whoAmI(@Args('token') token: string) {
+    const result = await this.authService.whoAmIService(token);
 
-    // return rest;
+    return result;
   }
 }

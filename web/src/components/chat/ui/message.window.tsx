@@ -7,6 +7,7 @@ import { useStoreContext } from '../../../context/store.context';
 
 import { useQuery, useSubscription } from '@apollo/client';
 import { FETCH_MORE, MESSAGE_SUBSCRIPTION } from '../queries/queries';
+import { observer } from 'mobx-react';
 
 const useStyles = makeStyles({
   root: {
@@ -25,9 +26,9 @@ const useStyles = makeStyles({
   },
 });
 
-export const MessageWindow: FC = () => {
+export const MessageWindow: FC = observer(() => {
   const {
-    authStore: { getUser, isAuth },
+    authStore: { getUser, isAuth, user },
   } = useStoreContext()
 
   const { data, fetchMore } = useQuery(FETCH_MORE, {
@@ -85,9 +86,11 @@ export const MessageWindow: FC = () => {
             setMessages(data.fetchMore)
           }
       }
-  
-      if(messages?.length < 21) {
+      
+      if (getUser) {
+        if(messages?.length < 21) {
           scrollOnLoad()
+        }
       }
 
       if (rest.loading === false) {
@@ -96,7 +99,7 @@ export const MessageWindow: FC = () => {
     }
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, messages, isAuth])
+  }, [data, messages, isAuth, rest])
 
   useEffect(() => {
 
@@ -112,11 +115,10 @@ export const MessageWindow: FC = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rest?.data?.messageAdded])
 
-  
-
+  console.log("user:", getUser, user)
   return (
     <Box className={classes.root} onScroll={handleScroll}>
-      {messages ? <MessageItems messages={messages} user={getUser} messagesEndRef={messagesEndRef}/> : null}
+      {(messages && user) && <MessageItems messages={messages} user={user} messagesEndRef={messagesEndRef}/>}
     </Box>
   );
-};
+});

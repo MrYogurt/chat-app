@@ -1,4 +1,4 @@
-import React, { FC, Fragment, useEffect, useLayoutEffect } from 'react';
+import React, { FC, Fragment, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { observer } from "mobx-react"
@@ -8,17 +8,18 @@ import { useStoreContext } from '../context/store.context';
 
 import { LoginForm } from './login/login.form';
 import { useLazyQuery } from '@apollo/client';
-import { CHECK_AUTH } from './chat/queries/queries';
+import { CHECK_AUTH, WHO_AM_I } from './chat/queries/queries';
 
 export const AuthPage: FC = observer(() => {
   const {
-    authStore: { setAuth, isAuth },
+    authStore: { setAuth, isAuth, setUser, getUser },
   } = useStoreContext()
 
-  const [checkAuth, { loading, data }] = useLazyQuery(CHECK_AUTH);
+  const [whoAmI, { ...rest }] = useLazyQuery(WHO_AM_I);
+
+  const [checkAuth, { data }] = useLazyQuery(CHECK_AUTH);
   
   const history = useHistory();
-  // const isAuth = authStatus;
 
   useEffect(() => {
     const token = localStorage.getItem('token')
@@ -27,21 +28,25 @@ export const AuthPage: FC = observer(() => {
       checkAuth({variables: {
         token: token
       }})
-
-      if (isAuth) {
-        history.push(Routes_Enum.CHAT);
-      }
-  
-      if (!isAuth) {
-        history.push(Routes_Enum.AUTH);
-      }
+      whoAmI({variables: {
+        token: token
+      }})
     }
 
+    if (isAuth) {
+      return history.push(Routes_Enum.CHAT);
+    }
+
+    if (!isAuth) {
+      return history.push(Routes_Enum.AUTH);
+    }
     
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [history, isAuth]);
 
   useEffect(() => {
+    const token = localStorage.getItem('token')
+    
     if (data) {
       setAuth(true)
     }
@@ -49,8 +54,24 @@ export const AuthPage: FC = observer(() => {
     if (!data) {
       setAuth(false)
     }
+
+    if (rest?.data?.whoAmI) {
+
+      console.log("setUser check:", rest?.data?.whoAmI)
+
+      setUser(rest.data.whoAmI)
+    }
+
+    if(!rest) {
+      whoAmI({variables: {
+        token: token
+      }})
+    }
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data])
+  }, [data, rest])
+
+  console.log("auth page user:", getUser)
 
   return <>{isAuth !== null && !isAuth && <LoginForm />}</>;
 });

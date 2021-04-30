@@ -1,4 +1,4 @@
-import React, { FC, useLayoutEffect } from 'react';
+import React, { FC, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { Box, makeStyles } from '@material-ui/core';
@@ -36,20 +36,23 @@ const useStyles = makeStyles({
 
 export const Chat: FC = () => {
   const {
-    authStore: { isAuth },
+    authStore: { isAuth, getUser },
   } = useStoreContext()
 
   const classes = useStyles();
   const history = useHistory();
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (!isAuth) {
-      history.push(Routes_Enum.AUTH);
+      history.push(Routes_Enum.MAIN);
     }
     if (isAuth) {
       history.push(Routes_Enum.CHAT);
     }
   }, [history, isAuth])
+
+  console.log("chat user:", getUser)
+
   return (
     <Box className={classes.root}>
       <Box mt="5vh" className={classes.header}>
@@ -58,11 +61,11 @@ export const Chat: FC = () => {
 
       <Box mt="5vh" mb="10vh" className={classes.chatWindow}>
         <Box display="flex" flexDirection="column">
-          {isAuth ? 
+          {isAuth && 
           <>
           <MessageWindow />
           <InputMessage />
-          </> : null}
+          </>}
         </Box>
       </Box>
     </Box>
