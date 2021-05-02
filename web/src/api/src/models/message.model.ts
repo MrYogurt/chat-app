@@ -1,6 +1,4 @@
 import { Field, ID, Int, ObjectType } from '@nestjs/graphql';
-import { MessagesModel } from '../models/messages.model';
-
 @ObjectType()
 export class MessageModel {
   @Field(() => ID, { nullable: true })
@@ -17,7 +15,4 @@ export class MessageModel {
 
   @Field({ nullable: true })
   send_date?: string;
-
-  //   @Field(() => [MessagesModel])
-  //   messages!: MessagesModel[];
 }

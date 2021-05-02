@@ -91,8 +91,6 @@ export class MessagesStore {
   }
 
   setMessages = (data: IMessage) => {
-    // const parsedData = toJS(data)
-
     this.messages = data
   }
 

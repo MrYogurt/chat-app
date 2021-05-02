@@ -1,10 +1,11 @@
-import { User } from './../entity/user';
 import { UseGuards } from '@nestjs/common';
+
 import { Args, Query, Resolver } from '@nestjs/graphql';
+
 import { TokenModel } from '../../src/models/token.model';
 import { UserModel } from '../../src/models/user.model';
+
 import { AuthService } from './auth.service';
-import { CurrentUser } from './curent.user.decorator';
 import { JwtAuthGuard } from './jwt-auth.guard';
 
 @Resolver(() => UserModel)

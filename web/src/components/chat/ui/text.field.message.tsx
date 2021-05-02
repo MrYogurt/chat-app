@@ -1,5 +1,6 @@
+import { Dispatch, FC, SetStateAction } from 'react';
+
 import { Box, makeStyles, TextField } from '@material-ui/core';
-import React, { Dispatch, FC, SetStateAction } from 'react';
 
 interface IInputProps {
   message: string;

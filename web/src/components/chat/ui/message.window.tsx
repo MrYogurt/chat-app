@@ -2,12 +2,14 @@ import React, { FC, useEffect, useRef, useState } from 'react';
 
 import { Box, makeStyles } from '@material-ui/core';
 
-import { MessageItems } from './message.items';
-import { useStoreContext } from '../../../context/store.context';
-
 import { useQuery, useSubscription } from '@apollo/client';
-import { FETCH_MORE, MESSAGE_SUBSCRIPTION } from '../queries/queries';
+
 import { observer } from 'mobx-react';
+
+import { MessageItems } from './message.items';
+
+import { useStoreContext } from '../../../context/store.context';
+import { FETCH_MORE, MESSAGE_SUBSCRIPTION } from '../../../queries/queries';
 
 const useStyles = makeStyles({
   root: {
@@ -115,10 +117,9 @@ export const MessageWindow: FC = observer(() => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rest?.data?.messageAdded])
 
-  console.log("user:", getUser, user)
   return (
     <Box className={classes.root} onScroll={handleScroll}>
-      {(messages && user) && <MessageItems messages={messages} user={user} messagesEndRef={messagesEndRef}/>}
+      {(messages && user) && <MessageItems messages={messages} user={getUser} messagesEndRef={messagesEndRef}/>}
     </Box>
   );
 });

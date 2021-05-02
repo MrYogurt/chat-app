@@ -35,8 +35,7 @@ export class AuthStore {
     this.isAuth = status
   }
 
-  setUser = (data: IUser) => {
-    console.log("store user:", data)
+  setUser = (data: any) => {
     this.user = data
   }
 }

@@ -2,16 +2,16 @@ import { AuthModule } from './auth/auth.module';
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 
-import { AppService } from '../src/app.service';
-
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Connection } from 'typeorm';
 
-import { User } from '../src/entity/user';
-// import { UsersModule } from '../src/user/user.module';
+import { AppService } from '../src/app.service';
 
+import { User } from '../src/entity/user';
 import { Messages } from '../src/entity/messages';
+
 import { MessagesModule } from '../src/messages/messages.module';
+
 import { join } from 'path';
 
 @Module({
@@ -32,7 +32,6 @@ import { join } from 'path';
       installSubscriptionHandlers: true,
     }),
     AuthModule,
-    // UsersModule,
     MessagesModule,
   ],
   providers: [AppService],

@@ -12,7 +12,7 @@ import { Routes_Enum } from '../../constants';
 import { useLazyQuery } from '@apollo/client';
 
 import { useStoreContext } from '../../context/store.context';
-import { SEND_FORM } from '../chat/queries/queries';
+import { SEND_FORM } from '../../queries/queries';
 
 const useStyles = makeStyles({
   root: {
@@ -44,7 +44,7 @@ const useStyles = makeStyles({
 
 export const LoginForm: FC = observer(() => {
   const {
-    authStore: { isAuth, setUser, getUser },
+    authStore: { setUser }
   } = useStoreContext()
 
   const history = useHistory();
@@ -54,12 +54,9 @@ export const LoginForm: FC = observer(() => {
   const [password, setPassword] = React.useState('');
   const [errorPassword, setErrorPassword] = React.useState(false);
 
-  const [sendData, { loading, data }] = useLazyQuery(SEND_FORM, {
-    variables: { nickname, password },
-  });
+  const [sendData, { loading, data }] = useLazyQuery(SEND_FORM);
 
   const classes = useStyles();
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
   
   const handleSubmit = async (event: any) => {
     event.preventDefault();
@@ -74,7 +71,7 @@ export const LoginForm: FC = observer(() => {
 
       return;
     } else {
-      sendData()
+      sendData({variables: { nickname, password }})
     }
   };
 
@@ -100,19 +97,14 @@ export const LoginForm: FC = observer(() => {
   };
 
   useEffect(() => {
-    // if (!isAuth) {
-    //   history.push(Routes_Enum.AUTH);
-    // }
-    if (isAuth) {
-      if (data) {
-        fillUser()
-      }
+    
+    if (data) {
+      fillUser()
+
     }
     
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [history, isAuth, data]);
-
-  console.log("login form user:", getUser)
+  }, [history, data]);
 
   return (
     <Box className={classes.root}>

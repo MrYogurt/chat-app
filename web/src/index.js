@@ -1,13 +1,18 @@
 import React from 'react';
+
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 import { split, HttpLink } from '@apollo/client';
 import { getMainDefinition } from '@apollo/client/utilities';
 import { WebSocketLink } from '@apollo/client/link/ws';
 import { setContext } from '@apollo/client/link/context';
+
+import App from './App';
+
+import './index.css';
+
+import reportWebVitals from './reportWebVitals';
 
 const httpLink = new HttpLink({
   uri: 'http://localhost:5000/graphql'

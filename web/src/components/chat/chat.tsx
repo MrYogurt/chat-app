@@ -1,7 +1,9 @@
-import React, { FC, useEffect } from 'react';
+import { FC, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { Box, makeStyles } from '@material-ui/core';
+
+import { useLazyQuery } from '@apollo/client';
 
 import { Routes_Enum } from '../../constants';
 
@@ -10,18 +12,16 @@ import { useStoreContext } from '../../context/store.context';
 import { InputMessage } from './ui/input.message';
 import { MessageWindow } from './ui/message.window';
 
+import { CHECK_AUTH } from '../../queries/queries';
+
 const useStyles = makeStyles({
   root: {
     display: 'flex',
     alignItems: 'center',
+    justifyContent: 'center',
     height: '100vh',
     flexDirection: 'column',
     background: '#87CEEB',
-  },
-  header: {
-    display: 'flex',
-    alignItems: 'center',
-    height: '50px',
   },
   chatWindow: {
     display: 'flex',
@@ -36,30 +36,42 @@ const useStyles = makeStyles({
 
 export const Chat: FC = () => {
   const {
-    authStore: { isAuth, getUser },
+    authStore: { isAuth }
   } = useStoreContext()
 
   const classes = useStyles();
   const history = useHistory();
 
+  const [checkToken, { data }] = useLazyQuery(CHECK_AUTH, {
+    onCompleted: data => {
+
+      if (!data.checkAuth) {
+        return history.push(Routes_Enum.MAIN);
+      }
+    },
+  });
+
   useEffect(() => {
     if (!isAuth) {
       history.push(Routes_Enum.MAIN);
     }
-    if (isAuth) {
-      history.push(Routes_Enum.CHAT);
-    }
-  }, [history, isAuth])
 
-  console.log("chat user:", getUser)
+    if (isAuth) {
+
+      if (!data) {
+        const token = localStorage.getItem('token')
+
+        checkToken({variables: {
+          token: token
+        }})
+      }
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [history, isAuth, data])
 
   return (
     <Box className={classes.root}>
-      <Box mt="5vh" className={classes.header}>
-        Dungeon Chat
-      </Box>
-
-      <Box mt="5vh" mb="10vh" className={classes.chatWindow}>
+      <Box className={classes.chatWindow}>
         <Box display="flex" flexDirection="column">
           {isAuth && 
           <>

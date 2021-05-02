@@ -2,14 +2,15 @@ import React, { FC } from 'react';
 
 import { Box } from '@material-ui/core';
 
+import { useLazyQuery } from '@apollo/client';
+
 import { useStoreContext } from '../../../context/store.context';
+import { SEND_MESSAGE } from '../../../queries/queries';
+
 import { Row } from '../../ui/row';
 
 import { SendMessageSubmit } from './submit.button';
 import { TextFieldMessage } from './text.field.message';
-import { SEND_MESSAGE } from '../queries/queries';
-import { useLazyQuery } from '@apollo/client';
-
 
 export const InputMessage: FC = () => {
   const {
@@ -27,8 +28,8 @@ export const InputMessage: FC = () => {
       sendMessage({
         variables: {
           data: {
-            sender_id: getUser?.catchData.id,
-            sender_name: getUser?.catchData.nickname,
+            sender_id: getUser.id,
+            sender_name: getUser.nickname,
             message: message
           }
         }

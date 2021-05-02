@@ -6,7 +6,8 @@ import {
   Theme,
 } from '@material-ui/core';
 import SendIcon from '@material-ui/icons/Send';
-import React, { FC } from 'react';
+
+import { FC } from 'react';
 
 interface IButtonSend {
   send: (e: any) => void;
