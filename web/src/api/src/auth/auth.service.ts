@@ -4,6 +4,7 @@ import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
 import { InjectRepository } from '@nestjs/typeorm';
+
 import { Repository } from 'typeorm';
 
 import { User } from '../../src/entity/user';
@@ -34,18 +35,19 @@ export class AuthService {
   }
 
   async addUser(username: string, pass: string): Promise<any> {
-    const result = await this.regUser(username, pass);
-
-    if (!result) {
-      return console.log('Error: user create failed');
-    }
-
-    if (result) {
-      return result;
-    }
+    return await this.regUser(username, pass)
+      .then((result) => {
+        return result;
+      })
+      .catch(() => {
+        return console.log('Error: user create failed');
+      });
   }
 
-  async regUser(nickname: string, password: string): Promise<any> {
+  async regUser(
+    nickname: string,
+    password: string,
+  ): Promise<{ id: number; nickname: string; regTime: any } | undefined> {
     try {
       const result = await this.usersRepository
         .createQueryBuilder()
@@ -58,7 +60,6 @@ export class AuthService {
         const user = {
           id: result.generatedMaps[0].id,
           nickname: nickname,
-          password: password,
           regTime: result.generatedMaps[0].registration_date,
         };
 
@@ -69,7 +70,7 @@ export class AuthService {
     }
   }
 
-  async addToken(id: number, key: string): Promise<any> {
+  async addToken(id: number, key: string) {
     await this.usersRepository
       .createQueryBuilder()
       .update(User)
@@ -78,7 +79,7 @@ export class AuthService {
       .execute();
   }
 
-  login(user: any) {
+  login(user: { username: string; id: number }) {
     const payload = { username: user.username, sub: user.id };
     return {
       access_token: this.jwtService.sign(payload),
