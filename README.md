@@ -9,12 +9,12 @@ $ yarn install
 ```bash
 
 # database
-$ yarn run db
+$ yarn db
 
 # server dev mode
-$ yarn run api
+$ yarn api
 
 # development
-$ yarn run app
+$ yarn app
 
 ```
