@@ -95,7 +95,7 @@ export const MessageWindow: FC = observer(() => {
         }
       }
 
-      if (rest.loading === false) {
+      if (rest.loading === false && rest.data) {
         scrollOnLoad()
       }
     }

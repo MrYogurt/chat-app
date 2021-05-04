@@ -1,5 +1,9 @@
+import { UseGuards } from '@nestjs/common';
+
 import { Args, Query, Resolver, Subscription } from '@nestjs/graphql';
 import { PubSub } from 'graphql-subscriptions';
+
+import { JwtAuthGuard } from '../../src/auth/jwt-auth.guard';
 
 import { MessageInput } from '../inputs/message.input';
 
@@ -14,6 +18,7 @@ export class MessagesResolver {
   constructor(private readonly messagesService: MessagesService) {}
 
   @Query(() => MessageModel, { name: 'sendMessage' })
+  @UseGuards(JwtAuthGuard)
   async sendMessage(@Args('data') data: MessageInput) {
     return await this.messagesService
       .addMessage(data.sender_id, data.sender_name, data.message)
@@ -25,11 +30,13 @@ export class MessagesResolver {
   }
 
   @Query(() => [MessageModel], { name: 'initializeMessages' })
+  @UseGuards(JwtAuthGuard)
   async initializeMessages() {
     return await this.messagesService.initializeMessages();
   }
 
   @Query(() => [MessageModel], { name: 'fetchMore' })
+  @UseGuards(JwtAuthGuard)
   async fetchMore(
     @Args('offset') offset: number,
     @Args('limit') limit: number,
@@ -38,6 +45,7 @@ export class MessagesResolver {
   }
 
   @Subscription(() => MessageModel)
+  @UseGuards(JwtAuthGuard)
   messageAdded() {
     return pubSub.asyncIterator('messageAdded');
   }
