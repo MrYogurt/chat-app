@@ -12,7 +12,7 @@ import { jwtConstants } from './constants';
 import { JwtStrategy } from './jwt.strategy';
 import { LocalStrategy } from './local.strategy';
 
-import { User } from '../../src/entity/user';
+import { User } from '../entity/user';
 
 @Module({
   imports: [

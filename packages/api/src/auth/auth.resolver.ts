@@ -2,8 +2,8 @@ import { UseGuards } from '@nestjs/common';
 
 import { Args, Query, Resolver } from '@nestjs/graphql';
 
-import { TokenModel } from '../../src/models/token.model';
-import { UserModel } from '../../src/models/user.model';
+import { TokenModel } from '../models/token.model';
+import { UserModel } from '../models/user.model';
 
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';

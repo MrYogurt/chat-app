@@ -1,7 +1,7 @@
 ## Installation
 
 ```bash
-$ npm run deps
+$ yarn install
 ```
 
 ## Running the app
@@ -9,12 +9,12 @@ $ npm run deps
 ```bash
 
 # database
-$ npm run db
-
-# development
-$ npm run app
+$ yarn run db
 
 # server dev mode
-$ npm run start:dev
+$ yarn run api
+
+# development
+$ yarn run app
 
 ```
