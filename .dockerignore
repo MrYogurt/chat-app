@@ -1,0 +1,15 @@
+*
+
+# root
+!yarn.lock
+!package.json
+
+**/node_modules
+packages/api/dist
+packages/api/node_modules
+packages/web/node_modules
+node_modules
+./node_modules
+./packages/api/dist
+./packages/api/node_modules
+./packages/web/node_modules
