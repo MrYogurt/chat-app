@@ -20,13 +20,6 @@ export const AuthPage: FC = observer(() => {
   
   const history = useHistory();
 
-  const checkWhoAmI = (token: string) => {
-
-      whoAmI({variables: {
-        token: token
-      }})
-  }
-
   const checkValidToken = (token: string) => {
 
     if (!data) {
@@ -36,7 +29,7 @@ export const AuthPage: FC = observer(() => {
     }
 
     if (data) {
-      return checkWhoAmI(token)
+      return whoAmI()
     }
   }
 
@@ -65,7 +58,7 @@ export const AuthPage: FC = observer(() => {
           if (rest?.data?.whoAmI) {
             return fillUser(rest.data.whoAmI)
           }
-          return checkWhoAmI(token)
+          return whoAmI()
         }
 
         if (!data) {

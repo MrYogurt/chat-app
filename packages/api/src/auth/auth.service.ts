@@ -17,6 +17,7 @@ interface IUser {
   nickname?: string;
   token?: string;
   registration_date?: any;
+  password?: string;
 }
 
 @Injectable()
@@ -91,34 +92,11 @@ export class AuthService {
     }
   }
 
-  async addToken(id: number, key: string) {
-    await this.usersRepository
-      .createQueryBuilder()
-      .update(User)
-      .set({ token: key })
-      .where('id = :id', { id: id })
-      .execute();
-  }
-
   login(user: IUser) {
     const payload = { username: user.nickname, sub: user.id };
     return {
       access_token: this.jwtService.sign(payload),
     };
-  }
-
-  async whoAmIService(token: string) {
-    const result = await this.usersRepository
-      .createQueryBuilder('user')
-      .where('user.token = :token', { token: token })
-      .getOne();
-
-    const parsed = {
-      id: result?.id,
-      nickname: result?.nickname,
-      registration_date: result?.registration_date,
-    };
-    return parsed;
   }
 
   async checkAuth(token: string) {

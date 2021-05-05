@@ -16,4 +16,7 @@ export class UserModel {
 
   @Field()
   access_token!: string;
+
+  @Field({ nullable: true })
+  token?: string;
 }

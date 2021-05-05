@@ -14,6 +14,7 @@ type UserModel {
   password: String!
   registration_date: String
   access_token: String!
+  token: String
 }
 
 type MessageModel {
@@ -27,7 +28,7 @@ type MessageModel {
 type Query {
   login(password: String!, nickname: String!): UserModel
   checkAuth(token: String!): TokenModel
-  whoAmI(token: String!): UserModel!
+  whoAmI: UserModel!
   initializeMessages: [MessageModel!]!
   fetchMore(limit: Float!, offset: Float!): [MessageModel!]!
 }

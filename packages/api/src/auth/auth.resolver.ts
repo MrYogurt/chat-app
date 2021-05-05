@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { UseGuards } from '@nestjs/common';
 
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
@@ -9,6 +10,7 @@ import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
 
 import * as bcrypt from 'bcrypt';
+import { CurrentUser } from './curent.user.decorator';
 
 @Resolver(() => UserModel)
 export class AuthResolver {
@@ -37,8 +39,6 @@ export class AuthResolver {
         registration_date: resultSearchUser.registration_date,
         access_token: token.access_token,
       };
-
-      this.authService.addToken(result.id, token.access_token);
 
       return result;
     }
@@ -77,8 +77,6 @@ export class AuthResolver {
           access_token: token.access_token,
         };
 
-        this.authService.addToken(result.id, token.access_token);
-
         return result;
       }
     }
@@ -91,7 +89,11 @@ export class AuthResolver {
 
   @Query(() => UserModel)
   @UseGuards(JwtAuthGuard)
-  async whoAmI(@Args('token') token: string) {
-    return await this.authService.whoAmIService(token);
+  async whoAmI(@CurrentUser() user: { userId: number; username: string }) {
+    const { password, ...rest } = await this.authService.checkExistenceUser(
+      user.username,
+    );
+
+    return rest;
   }
 }

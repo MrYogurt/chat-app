@@ -17,9 +17,6 @@ export class User extends BaseEntity {
   @Column()
   password?: string;
 
-  @Column({ nullable: true })
-  token?: string;
-
   @CreateDateColumn()
   registration_date?: number;
 }

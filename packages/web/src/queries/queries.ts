@@ -79,11 +79,12 @@ export const CHECK_AUTH = gql`
 `;
 
 export const WHO_AM_I = gql`
-  query whoAmI($token: String!) {
-    whoAmI (token: $token){
+  query whoAmI {
+    whoAmI {
         id
     		nickname
     		registration_date
+        token
     }
   }
 `;
