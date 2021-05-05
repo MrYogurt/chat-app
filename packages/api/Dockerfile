@@ -15,9 +15,8 @@ COPY packages/api/ /home/app/packages/api/
 
 # Build
 RUN cd packages/api \
-  && yarn build \
-  && yarn --production \
-  && echo "*** TODO: Find another way to manage common package ***" \
+  && yarn build
+
 # Serve
 FROM node:12.22.1-alpine3.10
 

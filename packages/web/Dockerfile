@@ -7,16 +7,10 @@ WORKDIR /home/app/
 COPY package.json yarn.lock /home/app/
 COPY packages/web/package.json /home/app/packages/web/
 
-RUN yarn install \
-  && yarn workspace web react-scripts start
-
-
 # Build
-COPY packages/web/ /home/app/packages/web/
-RUN cd packages/web \
-  && yarn build \
-  && yarn --production \
-  && echo "*** TODO: Find another way to manage common package ***" \
+RUN yarn install \
+  && yarn workspace web react-scripts build
+
 # Serve
 FROM node:12.22.1-alpine3.10
 
