@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
 import { InjectRepository } from '@nestjs/typeorm';
+import { MessageInput } from 'src/inputs/message.input';
 import { Repository } from 'typeorm';
 
 import { Messages } from '../entity/messages';
@@ -12,14 +13,18 @@ export class MessagesService {
     private usersRepository: Repository<Messages>,
   ) {}
 
-  async addMessage(sender_id: string, sender_name: string, msg: string) {
+  async addMessage(
+    sender_id: string,
+    sender_name: string,
+    message: string,
+  ): Promise<MessageInput> {
     try {
       const result = await this.usersRepository
         .createQueryBuilder()
         .insert()
         .into(Messages)
         .values([
-          { sender_id: sender_id, sender_name: sender_name, message: msg },
+          { sender_id: sender_id, sender_name: sender_name, message: message },
         ])
         .execute();
 
@@ -27,7 +32,7 @@ export class MessagesService {
         id: result.generatedMaps[0].id,
         sender_id: sender_id,
         sender_name: sender_name,
-        message: msg,
+        message: message,
         send_date: result.generatedMaps[0].send_date,
       };
     } catch (err) {
@@ -39,7 +44,7 @@ export class MessagesService {
     return await this.usersRepository.find();
   }
 
-  async initializeMessages(): Promise<any> {
+  async initializeMessages(): Promise<Messages[]> {
     return await this.usersRepository
       .createQueryBuilder('messages')
       .orderBy('messages.id', 'DESC')
@@ -47,7 +52,7 @@ export class MessagesService {
       .getMany();
   }
 
-  async fetchMoreMessages(offset: number, limit: number): Promise<any> {
+  async fetchMoreMessages(offset: number, limit: number): Promise<Messages[]> {
     return await this.usersRepository
       .createQueryBuilder('messages')
       .orderBy('messages.id', 'DESC')

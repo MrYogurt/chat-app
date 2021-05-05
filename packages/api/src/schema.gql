@@ -13,30 +13,36 @@ type UserModel {
   nickname: String!
   password: String!
   registration_date: String
-  access_token: String
+  access_token: String!
 }
 
 type MessageModel {
   id: ID
-  message: String
-  sender_name: String
-  sender_id: Int
+  message: String!
+  sender_name: String!
+  sender_id: Int!
   send_date: String
 }
 
 type Query {
-  login(password: String!, nickname: String!): UserModel!
+  login(password: String!, nickname: String!): UserModel
   checkAuth(token: String!): TokenModel
   whoAmI(token: String!): UserModel!
-  sendMessage(data: MessageInput!): MessageModel!
   initializeMessages: [MessageModel!]!
   fetchMore(limit: Float!, offset: Float!): [MessageModel!]!
 }
 
+type Mutation {
+  register(password: String!, nickname: String!): UserModel
+  sendMessage(data: MessageInput!): MessageModel!
+}
+
 input MessageInput {
+  id: Int
   sender_id: Int!
   sender_name: String!
   message: String!
+  send_date: String
 }
 
 type Subscription {

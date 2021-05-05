@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { observable, action, computed, makeObservable, toJS } from "mobx"
 
-import { Actions_Enum } from './../constants';
+import { Actions_Enum } from '../constants';
 
 interface IMessage {
   __typename: string

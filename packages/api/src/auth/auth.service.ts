@@ -9,6 +9,16 @@ import { Repository } from 'typeorm';
 
 import { User } from '../entity/user';
 
+import * as bcrypt from 'bcrypt';
+import { UserModel } from 'src/models/user.model';
+
+interface IUser {
+  id?: number;
+  nickname?: string;
+  token?: string;
+  registration_date?: any;
+}
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -17,24 +27,35 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async validateUser(username: string, pass: string): Promise<any> {
+  async validateUser(username: string, pass: string): Promise<IUser> {
     const user = await this.checkExistenceUser(username);
-    if (user && user.password === pass) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { password, ...result } = user;
-      return result;
+
+    if (user) {
+      const saltOrRounds = 10;
+      const hashPassword = await bcrypt.hash(pass, saltOrRounds);
+
+      const isMatch = await bcrypt.compare(pass, hashPassword);
+
+      if (isMatch) {
+        return user;
+      }
+
+      if (!isMatch) {
+        return null;
+      }
     }
+
     return null;
   }
 
-  async checkExistenceUser(name: string): Promise<any> {
+  async checkExistenceUser(name: string): Promise<IUser> {
     return await this.usersRepository
       .createQueryBuilder('user')
       .where('user.nickname = :nickname', { nickname: name })
       .getOne();
   }
 
-  async addUser(username: string, pass: string): Promise<any> {
+  async addUser(username: string, pass: string): Promise<IUser | void> {
     return await this.regUser(username, pass)
       .then((result) => {
         return result;
@@ -47,7 +68,7 @@ export class AuthService {
   async regUser(
     nickname: string,
     password: string,
-  ): Promise<{ id: number; nickname: string; regTime: any } | undefined> {
+  ): Promise<IUser | undefined> {
     try {
       const result = await this.usersRepository
         .createQueryBuilder()
@@ -60,7 +81,7 @@ export class AuthService {
         const user = {
           id: result.generatedMaps[0].id,
           nickname: nickname,
-          regTime: result.generatedMaps[0].registration_date,
+          registration_date: result.generatedMaps[0].registration_date,
         };
 
         return user;
@@ -79,8 +100,8 @@ export class AuthService {
       .execute();
   }
 
-  login(user: { username: string; id: number }) {
-    const payload = { username: user.username, sub: user.id };
+  login(user: IUser) {
+    const payload = { username: user.nickname, sub: user.id };
     return {
       access_token: this.jwtService.sign(payload),
     };

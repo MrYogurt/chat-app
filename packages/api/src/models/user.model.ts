@@ -14,6 +14,6 @@ export class UserModel {
   @Field({ nullable: true })
   registration_date?: string;
 
-  @Field({ nullable: true })
+  @Field()
   access_token!: string;
 }

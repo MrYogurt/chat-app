@@ -4,14 +4,14 @@ export class MessageModel {
   @Field(() => ID, { nullable: true })
   id?: number;
 
-  @Field({ nullable: true })
+  @Field()
   message!: string;
 
-  @Field({ nullable: true })
+  @Field()
   sender_name!: string;
 
-  @Field(() => Int, { nullable: true })
-  sender_id?: number;
+  @Field(() => Int)
+  sender_id!: number;
 
   @Field({ nullable: true })
   send_date?: string;

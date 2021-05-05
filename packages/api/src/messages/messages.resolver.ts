@@ -1,6 +1,6 @@
 import { UseGuards } from '@nestjs/common';
 
-import { Args, Query, Resolver, Subscription } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
 import { PubSub } from 'graphql-subscriptions';
 
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
@@ -17,7 +17,7 @@ const pubSub = new PubSub();
 export class MessagesResolver {
   constructor(private readonly messagesService: MessagesService) {}
 
-  @Query(() => MessageModel, { name: 'sendMessage' })
+  @Mutation(() => MessageModel, { name: 'sendMessage' })
   @UseGuards(JwtAuthGuard)
   async sendMessage(@Args('data') data: MessageInput) {
     return await this.messagesService

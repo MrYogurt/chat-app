@@ -5,12 +5,12 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Connection } from 'typeorm';
 
-import { AppService } from '../src/app.service';
+import { AppService } from './app.service';
 
-import { User } from '../src/entity/user';
-import { Messages } from '../src/entity/messages';
+import { User } from './entity/user';
+import { Messages } from './entity/messages';
 
-import { MessagesModule } from '../src/messages/messages.module';
+import { MessagesModule } from './messages/messages.module';
 
 import { join } from 'path';
 

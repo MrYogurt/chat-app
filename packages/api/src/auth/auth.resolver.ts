@@ -1,6 +1,6 @@
 import { UseGuards } from '@nestjs/common';
 
-import { Args, Query, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 
 import { TokenModel } from '../models/token.model';
 import { UserModel } from '../models/user.model';
@@ -8,11 +8,13 @@ import { UserModel } from '../models/user.model';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
 
+import * as bcrypt from 'bcrypt';
+
 @Resolver(() => UserModel)
 export class AuthResolver {
   constructor(private readonly authService: AuthService) {}
 
-  @Query(() => UserModel)
+  @Query(() => UserModel, { nullable: true })
   async login(
     @Args('nickname') nickname: string,
     @Args('password') password: string,
@@ -23,34 +25,63 @@ export class AuthResolver {
     );
 
     if (!resultSearchUser) {
-      const resultAddUser = await this.authService.addUser(nickname, password);
+      return null;
+    }
 
-      const token = this.authService.login(resultAddUser);
+    if (resultSearchUser) {
+      const token = this.authService.login(resultSearchUser);
 
       const result = {
-        id: resultAddUser.id,
-        nickname: resultAddUser.nickname,
-        registration_date: resultAddUser.registration_date,
+        id: resultSearchUser.id,
+        nickname: resultSearchUser.nickname,
+        registration_date: resultSearchUser.registration_date,
         access_token: token.access_token,
       };
 
-      this.authService.addToken(resultAddUser.id, token.access_token);
+      this.authService.addToken(result.id, token.access_token);
 
       return result;
     }
+  }
 
-    const token = this.authService.login(resultSearchUser);
+  @Mutation(() => UserModel, { nullable: true })
+  async register(
+    @Args('nickname') nickname: string,
+    @Args('password') password: string,
+  ) {
+    const resultSearchUser = await this.authService.validateUser(
+      nickname,
+      password,
+    );
 
-    const result = {
-      id: resultSearchUser.id,
-      nickname: resultSearchUser.nickname,
-      registration_date: resultSearchUser.registration_date,
-      access_token: token.access_token,
-    };
+    if (resultSearchUser) {
+      return null;
+    }
 
-    this.authService.addToken(resultSearchUser.id, token.access_token);
+    if (!resultSearchUser) {
+      const saltOrRounds = 10;
+      const hashPassword = await bcrypt.hash(password, saltOrRounds);
 
-    return result;
+      const resultAddUser = await this.authService.addUser(
+        nickname,
+        hashPassword,
+      );
+
+      if (resultAddUser) {
+        const token = this.authService.login(resultAddUser);
+
+        const result = {
+          id: resultAddUser.id,
+          nickname: resultAddUser.nickname,
+          registration_date: resultAddUser.registration_date,
+          access_token: token.access_token,
+        };
+
+        this.authService.addToken(result.id, token.access_token);
+
+        return result;
+      }
+    }
   }
 
   @Query(() => TokenModel, { nullable: true })
@@ -61,8 +92,6 @@ export class AuthResolver {
   @Query(() => UserModel)
   @UseGuards(JwtAuthGuard)
   async whoAmI(@Args('token') token: string) {
-    const result = await this.authService.whoAmIService(token);
-
-    return result;
+    return await this.authService.whoAmIService(token);
   }
 }

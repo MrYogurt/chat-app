@@ -19,26 +19,26 @@ services:
     ports:
       - 8080:8080
 
-  api:
-    # image: chat-app-api:latest
-    build:
-      context: ./../..
-      dockerfile: packages/api/Dockerfile
-    container_name: api
-    expose:
-      - 5000
-    depends_on:
-      - db
+  # api:
+  #   # image: chat-app-api:latest
+  #   build:
+  #     context: ./
+  #     dockerfile: packages/api/Dockerfile
+  #   container_name: api
+  #   expose:
+  #     - 5000
+  #   depends_on:
+  #     - db
 
-  web:
-    # image: chat-app-web:latest
-    build:
-      context: ./../..
-      dockerfile: packages/web/Dockerfile
-    container_name: web
-    expose:
-      - 3000
-    depends_on:
-      - api
-    environment:
-      - API_WS_URL=ws://localhost:5000/graphql
+  # web:
+  #   # image: chat-app-web:latest
+  #   build:
+  #     context: ./
+  #     dockerfile: packages/web/Dockerfile
+  #   container_name: web
+  #   expose:
+  #     - 3000
+  #   depends_on:
+  #     - api
+  #   environment:
+  #     - API_WS_URL=ws://localhost:5000/graphql

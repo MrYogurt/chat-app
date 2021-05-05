@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 
 import { Box } from '@material-ui/core';
 
-import { useLazyQuery } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 
 import { useStoreContext } from '../../../context/store.context';
 import { SEND_MESSAGE } from '../../../queries/queries';
@@ -19,7 +19,7 @@ export const InputMessage: FC = () => {
 
   const [message, setMessage] = React.useState('');
 
-  const [ sendMessage ] = useLazyQuery(SEND_MESSAGE)
+  const [ sendMessage ] = useMutation(SEND_MESSAGE)
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

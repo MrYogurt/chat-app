@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { MessagesService } from '../../src/messages/messages.service';
+import { MessagesService } from './messages.service';
 
-import { Messages } from '../../src/entity/messages';
+import { Messages } from '../entity/messages';
 
 import { MessagesResolver } from './messages.resolver';
 

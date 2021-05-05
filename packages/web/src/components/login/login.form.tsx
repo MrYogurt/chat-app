@@ -9,10 +9,17 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import { Routes_Enum } from '../../constants';
 
-import { useLazyQuery } from '@apollo/client';
+import { useLazyQuery, useMutation } from '@apollo/client';
 
 import { useStoreContext } from '../../context/store.context';
-import { SEND_FORM } from '../../queries/queries';
+import { SEND_LOGIN, SEND_REGISTER } from '../../queries/queries';
+
+interface IUser {
+  id: number,
+  nickname: string,
+  registration_date: any,
+  access_token: string,
+}
 
 const useStyles = makeStyles({
   root: {
@@ -38,7 +45,16 @@ const useStyles = makeStyles({
     height: 48,
     padding: '0 30px',
     maxWidth: '150px',
-    mt: '20px',
+    marginTop: '20px',
+    margin: '10px',
+  },
+  errorForm: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignContent: 'center',
+    maxWidth: '400px',
+    marginTop: "20px",
+    height: "20px",
   },
 });
 
@@ -53,12 +69,45 @@ export const LoginForm: FC = observer(() => {
   const [errorName, setErrorName] = React.useState(false);
   const [password, setPassword] = React.useState('');
   const [errorPassword, setErrorPassword] = React.useState(false);
+  const [errorForm, setErrorForm] = React.useState("");
 
-  const [sendData, { loading, data }] = useLazyQuery(SEND_FORM);
+  const [sendLogin, { loading }] = useLazyQuery(SEND_LOGIN, {onCompleted: data => {
+
+    if (!data.login) {
+      return setErrorForm("Login failed")
+    }
+
+    if (data.login) {
+      setErrorForm("")
+
+      fillUser(data.login)
+    }
+  },
+  onError: err => {
+    console.log("Login query failed:", err)
+  }
+});
+
+const [sendRegister, { ...rest }] = useMutation(SEND_REGISTER, {onCompleted: data => {
+
+  if (!data.register) {
+    return setErrorForm("Register failed, already exist")
+  }
+
+  if (data.register) {
+    setErrorForm("")
+
+    fillUser(data.register)
+  }
+},
+onError: err => {
+  console.log("Registartion query failed:", err)
+}
+});
 
   const classes = useStyles();
   
-  const handleSubmit = async (event: any) => {
+  const handleLogin = async (event: any) => {
     event.preventDefault();
 
     if (nickname.length < 6) {
@@ -71,12 +120,30 @@ export const LoginForm: FC = observer(() => {
 
       return;
     } else {
-      sendData({variables: { nickname, password }})
+      sendLogin({variables: { nickname, password }})
     }
   };
 
-  const fillUser = () => {
-    localStorage.setItem('token', data.login.access_token)
+  const handleRegister = async (event: any) => {
+    event.preventDefault();
+
+    if (nickname.length < 6) {
+      setErrorName(true);
+
+      return;
+    } else if (password.length < 6) {
+      setErrorName(false);
+      setErrorPassword(true);
+
+      return;
+    } else {
+      sendRegister({variables: { nickname, password }})
+    }
+  };
+
+  const fillUser = (data: IUser) => {
+
+    localStorage.setItem('token', data.access_token)
 
     if (localStorage.getItem('token')) {
       setErrorName(false);
@@ -96,19 +163,9 @@ export const LoginForm: FC = observer(() => {
     setName(event.target.value);
   };
 
-  useEffect(() => {
-    
-    if (data) {
-      fillUser()
-
-    }
-    
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [history, data]);
-
   return (
     <Box className={classes.root}>
-      <form onSubmit={handleSubmit} className={classes.form}>
+      <form className={classes.form}>
         <Box mt="120px" display="flex" justifyContent="center">
           <TextField
             onChange={handleChangeName}
@@ -132,9 +189,18 @@ export const LoginForm: FC = observer(() => {
             error={errorPassword}
           />
         </Box>
+        <Box className={classes.errorForm}>
+          <Box>{errorForm}</Box>
+        </Box>
+
         <Box mt="20px" display="flex" justifyContent="center">
-          <Button disabled={loading} type="submit" className={classes.button}>
+            
+          <Button disabled={loading || rest.loading} onClick={handleLogin} className={classes.button}>
             Login
+          </Button>
+
+          <Button disabled={loading || rest.loading} onClick={handleRegister} className={classes.button}>
+            Register
           </Button>
         </Box>
       </form>
