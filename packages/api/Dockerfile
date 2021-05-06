@@ -4,17 +4,24 @@ FROM node:12.22.1-alpine3.10 as builder
 WORKDIR /home/app/
 
 # Dependencies
-COPY package.json yarn.lock /home/app/
-COPY packages/api/package.json /home/app/packages/api/
+# COPY packages/api/package.json /home/app/
 
-RUN yarn install \
-  && yarn workspace api start:dev
+# RUN yarn install
 
 # Copy API serive sources
-COPY packages/api/ /home/app/packages/api/
+# COPY packages/api/ /home/app/packages/api/
+COPY packages/api/package.json /home/app/packages/api/
+COPY packages/api/package-lock.json /home/app/packages/api/
+COPY packages/api/nest-cli.json /home/app/packages/api/
+COPY packages/api/tsconfig.json /home/app/packages/api/
+COPY packages/api/tsconfig.build.json /home/app/packages/api/
+COPY packages/api/.eslintrc.js /home/app/packages/api/
+COPY packages/api/src /home/app/packages/api/src
 
 # Build
-RUN cd packages/api \
+# RUN yarn workspace api build
+RUN ls && cd packages/api \
+  && yarn install \
   && yarn build
 
 # Serve
