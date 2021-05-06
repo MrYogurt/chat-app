@@ -74,5 +74,6 @@ export const AuthPage: FC = observer(() => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuth, history, data, rest?.data?.whoAmI])
 
+  console.log("env:", process.env)
   return null;
 });
