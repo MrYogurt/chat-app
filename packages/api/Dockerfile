@@ -10,7 +10,6 @@ COPY packages/api/nest-cli.json /home/app/packages/api/
 COPY packages/api/tsconfig.json /home/app/packages/api/
 COPY packages/api/tsconfig.build.json /home/app/packages/api/
 COPY packages/api/.eslintrc.js /home/app/packages/api/
-# COPY packages/api/.env /home/app/packages/api/
 COPY packages/api/src /home/app/packages/api/src
 
 # Build

@@ -7,7 +7,8 @@
   "license": "UNLICENSED",
   "scripts": {
     "deps": "npm install && cd web && npm install && cd src/api && npm install",
-    "db": "docker-compose -f docker-compose.yml up",
+    "db": "docker-compose -f docker-compose-db.yml up",
+    "up": "docker-compose -f docker-compose.yml up",
     "app": "yarn workspace web react-scripts start",
     "api": "yarn workspace api start:dev",
     "start": "cd app/src/api && nest start",

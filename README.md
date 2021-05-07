@@ -18,3 +18,9 @@ $ yarn api
 $ yarn app
 
 ```
+
+## Dockerize app
+
+```bash
+$ yarn up
+```

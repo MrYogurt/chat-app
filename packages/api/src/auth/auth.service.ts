@@ -95,12 +95,10 @@ export class AuthService {
   }
 
   login(user: IUser) {
-    const secret = this.configService.get('JWT_SECRET');
-
     const payload = { username: user.nickname, sub: user.id };
 
     return {
-      access_token: this.jwtService.sign(payload, secret),
+      access_token: this.jwtService.sign(payload),
     };
   }
 

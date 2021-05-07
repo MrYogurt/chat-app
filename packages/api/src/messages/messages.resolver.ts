@@ -45,7 +45,7 @@ export class MessagesResolver {
   }
 
   @Subscription(() => MessageModel)
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   messageAdded() {
     return pubSub.asyncIterator('messageAdded');
   }

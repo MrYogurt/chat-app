@@ -21,6 +21,7 @@ export class AuthResolver {
     @Args('nickname') nickname: string,
     @Args('password') password: string,
   ) {
+    console.log('kavo');
     const resultSearchUser = await this.authService.validateUser(
       nickname,
       password,

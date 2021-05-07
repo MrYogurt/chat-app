@@ -24,7 +24,7 @@ import { join } from 'path';
     TypeOrmModule.forRootAsync({
       useFactory: () => ({
         type: 'postgres',
-        host: process.env.DB_URL || 'localhost',
+        host: process.env.DB_HOST || 'localhost',
         port: Number(process.env.DB_PORT) || 5432,
         username: process.env.DB_USERNAME || 'admin',
         password: process.env.DB_PASSWORD || '228228228',
