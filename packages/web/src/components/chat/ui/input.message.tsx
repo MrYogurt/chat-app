@@ -1,11 +1,14 @@
 import React, { FC } from 'react';
 
+import { useHistory } from 'react-router-dom';
+
 import { Box } from '@material-ui/core';
 
 import { useMutation } from '@apollo/client';
 
 import { useStoreContext } from '../../../context/store.context';
 import { SEND_MESSAGE } from '../../../queries/queries';
+import { Routes_Enum } from '../../../constants';
 
 import { Row } from '../../ui/row';
 
@@ -17,9 +20,17 @@ export const InputMessage: FC = () => {
     authStore: { getUser },
   } = useStoreContext()
 
+  const history = useHistory();
+
   const [message, setMessage] = React.useState('');
 
-  const [ sendMessage ] = useMutation(SEND_MESSAGE)
+  const [ sendMessage ] = useMutation(SEND_MESSAGE, {onError: err => {
+    console.log("Send message error:", err)
+
+    if (err.toString().indexOf('Unauthorized') > -1) {
+      history.push(Routes_Enum.AUTH);
+    }
+  }})
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

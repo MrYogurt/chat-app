@@ -37,6 +37,9 @@ export const MessageWindow: FC = observer(() => {
     variables: {
       offset: 0,
       limit: 20,
+    },
+    onError: err => {
+      console.log("Fetch more messages error:", err)
     }
   })
 

@@ -14,11 +14,26 @@ export const AuthPage: FC = observer(() => {
     authStore: { isAuth, setAuth, setUser },
   } = useStoreContext()
 
-  const [whoAmI, { ...rest }] = useLazyQuery(WHO_AM_I);
-
-  const [checkToken, { data }] = useLazyQuery(CHECK_AUTH);
-  
   const history = useHistory();
+
+  const [whoAmI] = useLazyQuery(WHO_AM_I, {onCompleted: content => {
+    fillUser(content.whoAmI)
+  },
+  onError: err => {
+    console.log("Who Am I query failed:", err)
+    
+    localStorage.removeItem('token')
+    history.push(Routes_Enum.AUTH);
+  }
+});
+
+  const [checkToken, { data }] = useLazyQuery(CHECK_AUTH, {onCompleted: result => {
+    whoAmI()
+  },
+  onError: err => {
+    console.log("Check token query failed:", err)
+  }
+});
 
   const checkValidToken = (token: string) => {
 
@@ -53,14 +68,6 @@ export const AuthPage: FC = observer(() => {
       
       if (token) {
 
-        if (data) {
-
-          if (rest?.data?.whoAmI) {
-            return fillUser(rest.data.whoAmI)
-          }
-          return whoAmI()
-        }
-
         if (!data) {
           return checkValidToken(token)
         }
@@ -72,7 +79,7 @@ export const AuthPage: FC = observer(() => {
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAuth, history, data, rest?.data?.whoAmI])
+  }, [isAuth, history, data])
 
   return null;
 });
