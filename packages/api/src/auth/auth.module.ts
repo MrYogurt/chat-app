@@ -20,7 +20,7 @@ import { User } from '../entity/user';
     TypeOrmModule.forFeature([User]),
     JwtModule.register({
       secret: jwtConstants.secret,
-      signOptions: { expiresIn: '5s' },
+      signOptions: { expiresIn: '10h' },
     }),
   ],
   providers: [AuthService, AuthResolver, LocalStrategy, JwtStrategy],
