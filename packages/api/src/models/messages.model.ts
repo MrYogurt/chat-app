@@ -15,5 +15,5 @@ export class MessagesModel {
   sender_id!: number;
 
   @Field({ nullable: true })
-  send_date?: string;
+  send_date?: number;
 }

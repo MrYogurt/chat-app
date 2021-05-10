@@ -12,7 +12,7 @@ export class UserModel {
   password!: string;
 
   @Field({ nullable: true })
-  registration_date?: string;
+  registration_date?: number;
 
   @Field()
   access_token!: string;

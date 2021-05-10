@@ -9,15 +9,13 @@ import { Repository } from 'typeorm';
 
 import { User } from '../entity/user';
 
-import { ConfigService } from '@nestjs/config';
-
 import * as bcrypt from 'bcrypt';
 
 interface IUser {
   id?: number;
   nickname?: string;
   token?: string;
-  registration_date?: any;
+  registration_date?: number;
   password?: string;
 }
 
@@ -27,7 +25,6 @@ export class AuthService {
     @InjectRepository(User)
     private usersRepository: Repository<User>,
     private jwtService: JwtService,
-    private configService: ConfigService,
   ) {}
 
   async validateUser(username: string, pass: string): Promise<IUser> {
