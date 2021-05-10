@@ -9,7 +9,7 @@ interface IMessage {
   message: string
   sender_name: string
   sender_id: number
-  send_date?: string
+  send_date?: number
   count?: number
 }
 

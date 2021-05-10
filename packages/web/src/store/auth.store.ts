@@ -4,7 +4,7 @@ import { observable, action, computed, makeObservable, toJS } from "mobx"
 export interface IUser {
   id?: number
   nickname?: string
-  registration_date?: string
+  registration_date?: number
   access_token: string
 }
 
