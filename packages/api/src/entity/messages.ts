@@ -15,10 +15,10 @@ export class Messages extends BaseEntity {
   message?: string;
 
   @Column()
-  sender_name?: string;
+  sender_name!: string;
 
   @Column()
-  sender_id?: string;
+  sender_id!: string;
 
   @CreateDateColumn()
   send_date?: number;

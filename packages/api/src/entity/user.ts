@@ -12,10 +12,10 @@ export class User extends BaseEntity {
   id?: number;
 
   @Column()
-  nickname?: string;
+  nickname!: string;
 
   @Column()
-  password?: string;
+  password!: string;
 
   @CreateDateColumn()
   registration_date?: number;
