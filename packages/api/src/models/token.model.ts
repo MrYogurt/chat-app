@@ -3,11 +3,11 @@ import { Field, ObjectType } from '@nestjs/graphql';
 @ObjectType()
 export class TokenModel {
   @Field({ nullable: true })
-  sub?: number;
+  sub!: number;
 
   @Field({ nullable: true })
-  iat?: number;
+  iat!: number;
 
   @Field({ nullable: true })
-  exp?: number;
+  exp!: number;
 }
