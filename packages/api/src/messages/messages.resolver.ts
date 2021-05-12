@@ -20,13 +20,11 @@ export class MessagesResolver {
   @Mutation(() => MessageModel, { name: 'sendMessage' })
   @UseGuards(JwtAuthGuard)
   async sendMessage(@Args('data') data: MessageInput) {
-    return await this.messagesService
-      .addMessage(data.sender_id, data.sender_name, data.message)
-      .then((message) => {
-        pubSub.publish('messageAdded', { messageAdded: message });
+    return await this.messagesService.addMessage(data).then((message) => {
+      pubSub.publish('messageAdded', { messageAdded: message });
 
-        return message;
-      });
+      return message;
+    });
   }
 
   @Query(() => [MessageModel], { name: 'initializeMessages' })

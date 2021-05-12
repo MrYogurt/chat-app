@@ -3,9 +3,9 @@
 # ------------------------------------------------------
 
 type TokenModel {
-  sub: Float
-  iat: Float
-  exp: Float
+  sub: Float!
+  iat: Float!
+  exp: Float!
 }
 
 type UserModel {

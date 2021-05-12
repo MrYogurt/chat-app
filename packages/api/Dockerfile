@@ -15,7 +15,8 @@ COPY packages/api/src /home/app/packages/api/src
 # Build
 RUN cd packages/api \
   && yarn install \
-  && yarn build
+  && yarn build \
+  && yarn --production
 
 # Serve
 FROM node:12.22.1-alpine3.10

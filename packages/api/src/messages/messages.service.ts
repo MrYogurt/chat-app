@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 
 import { InjectRepository } from '@nestjs/typeorm';
-import { MessageInput } from 'src/inputs/message.input';
 import { Repository } from 'typeorm';
+
+import { MessageModel } from 'src/models/message.model';
 
 import { Messages } from '../entity/messages';
 
@@ -10,29 +11,29 @@ import { Messages } from '../entity/messages';
 export class MessagesService {
   constructor(
     @InjectRepository(Messages)
-    private usersRepository: Repository<Messages>,
+    private messagesRepository: Repository<Messages>,
   ) {}
 
-  async addMessage(
-    sender_id: string,
-    sender_name: string,
-    message: string,
-  ): Promise<MessageInput> {
+  async addMessage(data: any): Promise<MessageModel> {
     try {
-      const result = await this.usersRepository
+      const result = await this.messagesRepository
         .createQueryBuilder()
         .insert()
         .into(Messages)
         .values([
-          { sender_id: sender_id, sender_name: sender_name, message: message },
+          {
+            sender_id: data.sender_id,
+            sender_name: data.sender_name,
+            message: data.message,
+          },
         ])
         .execute();
 
       return {
         id: result.generatedMaps[0].id,
-        sender_id: sender_id,
-        sender_name: sender_name,
-        message: message,
+        sender_id: data.sender_id,
+        sender_name: data.sender_name,
+        message: data.message,
         send_date: result.generatedMaps[0].send_date,
       };
     } catch (err) {
@@ -41,11 +42,11 @@ export class MessagesService {
   }
 
   async findAll(): Promise<Messages[]> {
-    return await this.usersRepository.find();
+    return await this.messagesRepository.find();
   }
 
   async initializeMessages(): Promise<Messages[]> {
-    return await this.usersRepository
+    return await this.messagesRepository
       .createQueryBuilder('messages')
       .orderBy('messages.id', 'DESC')
       .limit(20)
@@ -53,7 +54,7 @@ export class MessagesService {
   }
 
   async fetchMoreMessages(offset: number, limit: number): Promise<Messages[]> {
-    return await this.usersRepository
+    return await this.messagesRepository
       .createQueryBuilder('messages')
       .orderBy('messages.id', 'DESC')
       .skip(offset)

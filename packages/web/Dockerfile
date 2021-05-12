@@ -12,7 +12,8 @@ COPY packages/web/public/ /home/app/packages/web/public
 # Build
 RUN cd packages/web \
   && yarn install \
-  && yarn build
+  && yarn build \
+  && yarn --production
 
 # Serve
 FROM node:12.22.1-alpine3.10

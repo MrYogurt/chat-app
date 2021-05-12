@@ -2,12 +2,12 @@ import { Field, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
 export class TokenModel {
-  @Field({ nullable: true })
+  @Field()
   sub!: number;
 
-  @Field({ nullable: true })
+  @Field()
   iat!: number;
 
-  @Field({ nullable: true })
+  @Field()
   exp!: number;
 }
